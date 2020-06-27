@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <!-- MOBILE SUPPORT -->
+  <meta charset="utf-8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Indra Mahkota's Site">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- DESCRIPTION -->
+  <title>Indra Mahkota's Site</title>
+  <meta name="description" content="My first App based web.">
+  
+  <!-- ICONS -->
+  <link rel="apple-touch-icon" sizes="57x57" href="assets/icons/apple-icon-57x57.webp">
+  <link rel="apple-touch-icon" sizes="60x60" href="assets/icons/apple-icon-60x60.webp">
+  <link rel="apple-touch-icon" sizes="72x72" href="assets/icons/apple-icon-72x72.webp">
+  <link rel="apple-touch-icon" sizes="76x76" href="assets/icons/apple-icon-76x76.webp">
+  <link rel="apple-touch-icon" sizes="114x114" href="assets/icons/apple-icon-114x114.webp">
+  <link rel="apple-touch-icon" sizes="120x120" href="assets/icons/apple-icon-120x120.webp">
+  <link rel="apple-touch-icon" sizes="144x144" href="assets/icons/apple-icon-144x144.webp">
+  <link rel="apple-touch-icon" sizes="152x152" href="assets/icons/apple-icon-152x152.webp">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-icon-180x180.webp">
+  <link rel="icon" type="image/webp" sizes="192x192"  href="assets/icons/android-icon-192x192.webp">
+  <link rel="icon" type="image/webp" sizes="32x32" href="assets/icons/favicon-32x32.webp">
+  <link rel="icon" type="image/webp" sizes="96x96" href="assets/icons/favicon-96x96.webp">
+  <link rel="icon" type="image/webp" sizes="16x16" href="assets/icons/favicon-16x16.webp">
+  <link rel="manifest" href="assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="assets/icons/ms-icon-144x144.webp">
+  <meta name="theme-color" content="#ffffff">
+  
+  <!-- FONT AND THEMES STYLE -->
+  <link rel="stylesheet" type="text/css" href="assets/styles/inline.css">
+</head>
+<body>  
+  <header class="header">
+    <h1 id="btnMenu" class="header__title">☰ Indra Mahkota's Site</h1>
+    <div>
+      <button id="butRefresh" aria-label="Refresh"></button>
+      <img id="btnProfile" src="assets/images/indra.webp" alt="foto" height="24" width="24">
+    </div>
+  </header>
+  
+  <main class="main">
+    <div class="card">
+      <p>Tentang!</p>
+    </div>
+  </main>
+
+  <div id="overlay"></div>
+  <div id="sidebar">
+    <div class="sidebar-header" style="background-image: url(assets/images/bgprofile.webp)">
+      <div class="sidebar-image">
+        <img src="assets/images/indra.webp" alt="profile" height="50" width="50">
+        <p class="nama">indra mahkota</p>
+        <p class="email">indramahkota1@gmail.com</p>
+      </div>
+    </div>
+    <div class="menusatu">
+      <a id="target1">
+        <img src="assets/images/home.webp" alt="home" height="20" width="20">
+        Halaman Utama
+      </a>
+      <a id="target2">
+        <img src="assets/images/settings.webp" alt="settings" height="20" width="20">
+        Pengaturan
+      </a>
+      <a id="target3" class="aktif">
+        <img src="assets/images/info.webp" alt="info" height="20" width="20">
+        Tentang
+      </a>
+    </div>
+    <div class="menudua">
+      <a id="target" class="aktif">
+        <img src="assets/images/logout.webp" alt="logout" height="20" width="20">
+        Keluar
+      </a>
+    </div>
+  </div>
+  
+  <div class="loader">
+    <svg viewBox="0 0 32 32" width="32" height="32">
+      <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
+    </svg>
+  </div>
+
+  <script src="assets/scripts/pages.js"></script>
+</body>
+</html>
