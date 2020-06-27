@@ -35,38 +35,38 @@
 </head>
 
 <body>
-    <nav>
-        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-
+    <nav role="navigation">
         <div class="nav-wrapper">
             <a href="#" class="brand-logo">Indra Mahkota</a>
-            <ul class="right hide-on-med-and-down">
+            <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+            <ul class="topnav right hide-on-med-and-down">
                 <li><a href="#">Beranda</a></li>
                 <li><a href="#">Pengaturan</a></li>
                 <li><a href="#">Tentang</a></li>
             </ul>
+
+            <ul class="sidenav" id="slide-out">
+                <li>
+                    <div class="user-view" style="background-image: url(assets/images/bgprofile.webp)">
+                        <a href="#"><img class="circle" src="assets/images/indra.webp"></a>
+                        <a href="#"><span class="white-text name">Indra Mahkota</span></a>
+                        <a href="#"><span class="white-text email">indramahkota1@gmail.com</span></a>
+                    </div>
+                </li>
+
+                <li><a class="waves-effect" href="#!"><i class="material-icons">home</i>Beranda</a></li>
+                <li><a class="waves-effect" href="#!"><i class="material-icons">settings</i>Pengaturan</a></li>
+                <li><a class="waves-effect" href="#!"><i class="material-icons">info</i>Tentang</a></li>
+
+                <li>
+                    <div class="divider"></div>
+                </li>
+
+                <li><a class="waves-effect" href="#!"><i class="material-icons">exit_to_app</i>Keluar</a></li>
+            </ul>
         </div>
     </nav>
-
-    <ul id="slide-out" class="sidenav">
-        <li>
-            <div class="user-view" style="background-image: url(assets/images/bgprofile.webp)">
-                <a href="#"><img class="circle" src="assets/images/indra.webp"></a>
-                <a href="#"><span class="white-text name">Indra Mahkota</span></a>
-                <a href="#"><span class="white-text email">indramahkota1@gmail.com</span></a>
-            </div>
-        </li>
-
-        <li><a class="waves-effect" href="#!"><i class="material-icons">home</i>Beranda</a></li>
-        <li><a class="waves-effect" href="#!"><i class="material-icons">settings</i>Pengaturan</a></li>
-        <li><a class="waves-effect" href="#!"><i class="material-icons">info</i>Tentang</a></li>
-
-        <li>
-            <div class="divider"></div>
-        </li>
-
-        <li><a class="waves-effect" href="#!"><i class="material-icons">exit_to_app</i>Keluar</a></li>
-    </ul>
 
 </body>
 
