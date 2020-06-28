@@ -2,6 +2,14 @@ import beranda from "../pages/beranda.html";
 import pengaturan from "../pages/pengaturan.html";
 import tentang from "../pages/tentang.html";
 
+import data from "../js/data-source.js";
+
+import "../images/arsenal.png";
+import "../images/astonvilla.png";
+import "../images/bournemouth.png";
+import "../images/brighton.png";
+import "../images/burnley.png";
+
 const initNav = () => {
   // Activate sidebar nav
   var elems = document.querySelectorAll(".sidenav");
@@ -20,6 +28,8 @@ const initNav = () => {
 
       // Muat konten halaman yang dipanggil
       page = event.target.getAttribute("href").substr(1);
+      if (window.location.hash.substr(1) === page) return;
+
       loadPage(page);
     });
   });
@@ -30,6 +40,27 @@ const initNav = () => {
     switch (page) {
       case "beranda":
         content.innerHTML = beranda;
+
+        let articlesHTML = "";
+        data.forEach(function (item) {
+          console.log(item.strImage);
+          articlesHTML += `
+                  <div class="card">
+                    <a href="#">
+                      <div class="card-image waves-effect waves-block waves-light">
+                        <img src="${item.strImage}" />
+                      </div>
+                    </a>
+                    <div class="card-content">
+                      <span class="card-title truncate">${item.strName}</span>
+                      <p>${item.strDescription}</p>
+                    </div>
+                  </div>
+                `;
+        });
+
+        document.getElementById("articles").innerHTML = articlesHTML;
+
         break;
 
       case "pengaturan":

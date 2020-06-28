@@ -7,18 +7,19 @@ module.exports = merge(base, {
   devtool: false,
   performance: {
     maxEntrypointSize: 900000,
-    maxAssetSize: 900000
+    maxAssetSize: 900000,
   },
   optimization: {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
           output: {
-            comments: false
-          }
-        }
-      })
-    ]
+            comments: false,
+          },
+        },
+        extractComments: false,
+      }),
+    ],
   },
   module: {
     rules: [
@@ -29,9 +30,9 @@ module.exports = merge(base, {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env"],
-          }
-        }
-      }
-    ]
+          },
+        },
+      },
+    ],
   },
 });
