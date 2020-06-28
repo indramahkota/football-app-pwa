@@ -1,6 +1,5 @@
-.user-view {
-  background-repeat: no-repeat;
-  background-position: center center;
+.background > img {
+  max-width: 100%;
 }
 
 .nav-wrapper {
