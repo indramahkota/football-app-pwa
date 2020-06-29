@@ -4,26 +4,27 @@ import tentang from "../pages/tentang.html";
 
 import data from "../js/data-source.js";
 
-const images = require.context('../images', true);
+const images = require.context("../images", true);
 const imagePath = (name) => images(name, true);
 
 const initNav = () => {
   // Activate sidebar nav
-  var elems = document.querySelectorAll(".sidenav");
+  let elems = document.querySelectorAll(".sidenav");
   M.Sidenav.init(elems);
 
-  var page = window.location.hash.substr(1);
+  let page = window.location.hash.substr(1);
   if (page == "") page = "beranda";
   loadPage(page);
 
   document.querySelectorAll(".sidenav a, .topnav a").forEach(function (elm) {
     elm.addEventListener("click", function (event) {
-      var sidenav = document.querySelector(".sidenav");
+      let sidenav = document.querySelector(".sidenav");
       M.Sidenav.getInstance(sidenav).close();
 
-      page = event.target.getAttribute("href").substr(1);
-      if (window.location.hash.substr(1) === page) return;
+      let reference = event.target.getAttribute("href");
+      if (!reference) return;
 
+      page = reference.substr(1);
       loadPage(page);
     });
   });
@@ -64,8 +65,12 @@ const initNav = () => {
         content.innerHTML = tentang;
         break;
 
+      case "keluar":
+        let modal = document.querySelector("#keluar-modal");
+        M.Modal.getInstance(modal).open();
+        break;
+
       default:
-        content.innerHTML = beranda;
         break;
     }
   }

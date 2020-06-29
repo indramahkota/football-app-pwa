@@ -8,6 +8,19 @@ import initNav from "./assets/js/navigation.js";
 M.AutoInit();
 
 document.addEventListener("DOMContentLoaded", function () {
+  let dropdownElems = document.querySelectorAll(".dropdown-trigger");
+  M.Dropdown.init(dropdownElems, {
+    coverTrigger: false
+  });
+
+  let modalElems = document.querySelectorAll(".modal");
+  M.Modal.init(modalElems, {
+    onCloseEnd: () => {
+      let content = document.querySelector("#body-content");
+      content.innerHTML = "";
+    }
+  });
+
   initNav();
 });
 

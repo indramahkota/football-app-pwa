@@ -12,7 +12,6 @@
     <!-- DESCRIPTION -->
     <title>Football Clubs</title>
     <meta name="description" content="Football Clubs by Indra Mahkota" />
-    
 </head>
 
 <body>
@@ -21,10 +20,22 @@
             <a href="#" class="brand-logo">Football Clubs</a>
             <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
+            <ul id="dropdown1" class="dropdown-content">
+                <li>
+                    <a href="#keluar"><i class="material-icons">exit_to_app</i>Keluar</a>
+                </li>
+            </ul>
+
             <ul class="topnav right hide-on-med-and-down">
                 <li><a href="#beranda">Beranda</a></li>
                 <li><a href="#pengaturan">Pengaturan</a></li>
                 <li><a href="#tentang">Tentang</a></li>
+                <li>
+                    <a class="dropdown-trigger" data-target="dropdown1" href="#other">
+                        <i class="valign-wrapper"><img class="circle" src="assets/images/indra.webp" width="32"
+                                height="32" /></i>
+                    </a>
+                </li>
             </ul>
 
             <ul class="sidenav" id="slide-out">
@@ -33,9 +44,9 @@
                         <div class="background">
                             <img src="assets/images/bgprofile.webp" />
                         </div>
-                        <a href="#"><img class="circle" src="assets/images/indra.webp" /></a>
-                        <a href="#"><span class="white-text name">Indra Mahkota</span></a>
-                        <a href="#"><span class="white-text email">indramahkota1@gmail.com</span></a>
+                        <img class="circle" src="assets/images/indra.webp" />
+                        <span class="white-text name">Indra Mahkota</span>
+                        <span class="white-text email">indramahkota1@gmail.com</span>
                     </div>
                 </li>
 
@@ -54,13 +65,23 @@
                 </li>
 
                 <li>
-                    <a class="waves-effect" href="#!"><i class="material-icons">exit_to_app</i>Keluar</a>
+                    <a class="waves-effect" href="#keluar"><i class="material-icons">exit_to_app</i>Keluar</a>
                 </li>
             </ul>
         </div>
     </nav>
 
     <div class="container" id="body-content"></div>
+
+    <div id="keluar-modal" class="modal">
+        <div class="modal-content">
+            <h4>Keluar</h4>
+            <p>Apakah Anda ingin keluar?</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Ya</a>
+        </div>
+    </div>
 </body>
 
 </html>
