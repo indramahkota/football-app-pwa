@@ -8,7 +8,6 @@ const images = require.context("../images", true);
 const imagePath = (name) => images(name, true);
 
 const initNav = () => {
-  // Activate sidebar nav
   let elems = document.querySelectorAll(".sidenav");
   M.Sidenav.init(elems);
 
@@ -23,6 +22,13 @@ const initNav = () => {
 
       let reference = event.target.getAttribute("href");
       if (!reference) return;
+
+      document.querySelectorAll(".sidenav li, .topnav li").forEach(function (lielm) {
+          lielm.classList.remove('active');
+      });
+      
+      let parent = event.target.parentElement;
+      parent.className += ' active';
 
       page = reference.substr(1);
       loadPage(page);
