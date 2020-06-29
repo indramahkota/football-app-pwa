@@ -1,21 +1,20 @@
 let cacheName = 'indramahkota-v1';
 let filesToCache = [
   '/',
+  '/bundle.js',
+  '/worker.js',
   '/index.html',
-  '/page1.html',
-  '/page2.html',
-  '/page3.html',
-  '/assets/scripts/pages.js',
-  '/assets/scripts/tambah.js',
-  '/assets/scripts/mapbox.js',
-  '/assets/styles/inline.css',
+  '/assets/fonts/MaterialIcons-Regular.eot',
+  '/assets/fonts/MaterialIcons-Regular.ttf',
+  '/assets/fonts/MaterialIcons-Regular.woff',
+  '/assets/fonts/MaterialIcons-Regular.woff2',
+  '/assets/images/arsenal.png',
+  '/assets/images/astonvilla.png',
+  '/assets/images/bournemouth.png',
+  '/assets/images/brighton.png',
+  '/assets/images/burnley.png',
   '/assets/images/bgprofile.webp',
-  '/assets/images/home.webp',
-  '/assets/images/info.webp',
-  '/assets/images/logout.webp',
-  '/assets/images/settings.webp',
-  '/assets/images/indra.webp',
-  '/assets/images/refresh.svg'
+  '/assets/images/indra.webp'
 ];
 
 self.addEventListener('install', e => {
