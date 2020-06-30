@@ -21,12 +21,12 @@ module.exports = {
         use: [{ loader: "style-loader" }, { loader: "css-loader" }],
       },
       {
-        test: /\.(eot|ttf|woff|woff2|png|webp|ico|xml)$/i,
+        test: /\.(eot|ttf|woff|woff2|png|webp|ico|xml|ico)$/i,
         use: [
           {
             loader: "file-loader",
             options: {
-              name: "assets/[name].[ext]",
+              name: "[name].[ext]",
             },
           },
         ],
@@ -99,6 +99,7 @@ module.exports = {
       display: "standalone",
       background_color: "#3E4EB8",
       theme_color: "#2F3BA2",
-    })
+      fingerprints: false,
+    }),
   ],
 };

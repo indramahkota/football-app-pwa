@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initNav();
 });
 
-/* if ("serviceWorker" in navigator) {
+if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("./worker.js")
@@ -37,4 +37,4 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 } else {
   console.log("ServiceWorker belum didukung browser ini.");
-} */
+}
