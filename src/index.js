@@ -7,10 +7,10 @@ import initNav from "./assets/js/navigation.js";
 
 M.AutoInit();
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   let dropdownElems = document.querySelectorAll(".dropdown-trigger");
   M.Dropdown.init(dropdownElems, {
-    coverTrigger: false
+    coverTrigger: false,
   });
 
   let modalElems = document.querySelectorAll(".modal");
@@ -18,20 +18,20 @@ document.addEventListener("DOMContentLoaded", function () {
     onCloseEnd: () => {
       let content = document.querySelector("#body-content");
       content.innerHTML = "";
-    }
+    },
   });
 
   initNav();
 });
 
 /* if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function () {
+  window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("./worker.js")
-      .then(function () {
+      .then(() => {
         console.log("Pendaftaran ServiceWorker berhasil");
       })
-      .catch(function () {
+      .catch(() => {
         console.log("Pendaftaran ServiceWorker gagal");
       });
   });

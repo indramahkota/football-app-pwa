@@ -2,18 +2,25 @@
   max-width: 100%;
 }
 
-.nav-wrapper {
-  margin-left: 16px;
-  margin-right: 16px;
+#body-content {
+  margin-top: 16px;
+}
+
+.card-content > p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
 }
 
 .dropdown-content {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   margin: 0;
   display: none;
   min-width: 250px;
   max-height: auto;
-	margin-left: -1px;
+  margin-left: -1px;
   overflow: hidden;
   opacity: 0;
   position: absolute;

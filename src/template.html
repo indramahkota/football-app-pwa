@@ -17,8 +17,8 @@
 <body>
     <div class="navbar-fixed">
         <nav role="navigation">
-            <div class="nav-wrapper">
-                <a href="#" class="brand-logo">Football Clubs</a>
+            <div class="nav-wrapper container">
+                <a id="beranda-logo" href="#beranda" class="brand-logo truncate">Football Clubs</a>
                 <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
                 <ul id="dropdown1" class="dropdown-content">
@@ -28,11 +28,11 @@
                 </ul>
 
                 <ul class="topnav right hide-on-med-and-down">
-                    <li><a href="#beranda">Beranda</a></li>
-                    <li><a href="#pengaturan">Pengaturan</a></li>
-                    <li><a href="#tentang">Tentang</a></li>
-                    <li>
-                        <a class="dropdown-trigger" data-target="dropdown1" href="#other">
+                    <li id="beranda-menu"><a href="#beranda">Beranda</a></li>
+                    <li id="pengaturan-menu"><a href="#pengaturan">Pengaturan</a></li>
+                    <li id="tentang-menu"><a href="#tentang">Tentang</a></li>
+                    <li id="profile-menu">
+                        <a class="dropdown-trigger" data-target="dropdown1" href="#">
                             <i class="valign-wrapper"><img class="circle" src="assets/images/indra.webp" width="32"
                                     height="32" /></i>
                         </a>
@@ -54,13 +54,13 @@
             </div>
         </li>
 
-        <li>
+        <li id="beranda-menu">
             <a class="waves-effect" href="#beranda"><i class="material-icons">home</i>Beranda</a>
         </li>
-        <li>
+        <li id="pengaturan-menu">
             <a class="waves-effect" href="#pengaturan"><i class="material-icons">settings</i>Pengaturan</a>
         </li>
-        <li>
+        <li id="tentang-menu">
             <a class="waves-effect" href="#tentang"><i class="material-icons">info</i>Tentang</a>
         </li>
 
