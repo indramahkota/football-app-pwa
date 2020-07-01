@@ -20,6 +20,28 @@ const initNav = () => {
     });
   };
 
+  let viewItem = (index) => {
+    let content = document.querySelector("#body-content");
+    data.forEach((elm) => {
+      if (elm.link === index) {
+        content.innerHTML = "";
+        content.innerHTML = `
+          <div id="club-articles" class="card">
+            <a href="#">
+              <div class="card-image waves-effect waves-block waves-light">
+                <img src="${elm.strImage}" />
+              </div>
+            </a>
+            <div class="card-content">
+              <span class="card-title truncate">${elm.strName}</span>
+              <p>${elm.strDescription}</p>
+            </div>
+          </div>
+        `;
+      }
+    });
+  };
+
   let loadPage = (page) => {
     let content = document.querySelector("#body-content");
 
@@ -31,23 +53,30 @@ const initNav = () => {
         let articlesHTML = "";
         data.forEach((item) => {
           articlesHTML += `
-                  <div class="col l6 m6 s12">
-                    <div class="card">
-                      <a href="#">
-                        <div class="card-image waves-effect waves-block waves-light">
-                          <img src="${imagePath(item.strImage).default}" />
-                        </div>
-                      </a>
-                      <div class="card-content">
-                        <span class="card-title truncate">${item.strName}</span>
-                        <p>${item.strDescription}</p>
-                      </div>
-                      </div>
+            <div class="col l6 m6 s12">
+              <div id="club-articles" class="card" data=${item.link}>
+                <a href="#${item.link}">
+                  <div class="card-image waves-effect waves-block waves-light">
+                    <img src="${imagePath(item.strImage).default}" />
                   </div>
-                `;
+                </a>
+                <div class="card-content">
+                  <span class="card-title truncate">${item.strName}</span>
+                  <p class="cut-text">${item.strDescription}</p>
+                </div>
+                </div>
+            </div>
+          `;
         });
 
         document.getElementById("articles").innerHTML = articlesHTML;
+        document.querySelectorAll("#club-articles").forEach((elm) => {
+          elm.addEventListener("click", (event) => {
+            let index = elm.getAttribute("data");
+            viewItem(index);
+          });
+        });
+
         break;
 
       case "pengaturan":
@@ -66,6 +95,7 @@ const initNav = () => {
         break;
 
       default:
+        viewItem(page);
         break;
     }
   };
@@ -87,11 +117,9 @@ const initNav = () => {
     });
   });
 
-  document
-    .querySelector("#beranda-logo")
-    .addEventListener("click", (event) => {
-      loadPage("beranda");
-    });
+  document.querySelector("#beranda-logo").addEventListener("click", (event) => {
+    loadPage("beranda");
+  });
 };
 
 export default initNav;
