@@ -29,7 +29,7 @@ const initNav = () => {
           <div id="club-articles" class="card">
             <a href="#">
               <div class="card-image waves-effect waves-block waves-light">
-                <img src="${elm.strImage}" />
+                <img src="${elm.strImage}" alt="Football Club Badge" />
               </div>
             </a>
             <div class="card-content">
@@ -101,7 +101,7 @@ const initNav = () => {
   };
 
   let page = window.location.hash.substr(1);
-  if (page == "") page = "beranda";
+  if (page === "") page = "beranda";
   loadPage(page);
 
   document.querySelectorAll(".sidenav a, .topnav a").forEach((elm) => {

@@ -14,12 +14,12 @@ module.exports = merge(base, {
       new TerserPlugin({
         terserOptions: {
           output: {
-            comments: false,
-          },
+            comments: false
+          }
         },
-        extractComments: false,
-      }),
-    ],
+        extractComments: false
+      })
+    ]
   },
   module: {
     rules: [
@@ -29,10 +29,10 @@ module.exports = merge(base, {
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-env"],
-          },
-        },
-      },
-    ],
-  },
+            presets: ["@babel/preset-env"]
+          }
+        }
+      }
+    ]
+  }
 });

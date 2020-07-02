@@ -21,7 +21,7 @@ module.exports = {
         use: [{ loader: "style-loader" }, { loader: "css-loader" }],
       },
       {
-        test: /\.(eot|ttf|woff|woff2|png|webp|ico|xml|ico)$/i,
+        test: /\.(eot|ttf|woff|woff2|png|webp|ico|xml)$/i,
         use: [
           {
             loader: "file-loader",
@@ -99,7 +99,7 @@ module.exports = {
       display: "standalone",
       background_color: "#3E4EB8",
       theme_color: "#2F3BA2",
-      fingerprints: false,
+      fingerprints: false
     }),
   ],
 };
