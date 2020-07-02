@@ -1,4 +1,4 @@
-const CACHE_NAME = "indramahkota-v1";
+const CACHE_NAME = "indramahkota-footballclubs-v1";
 const filesToCache = [
   "/",
   "/bundle.js",
@@ -38,7 +38,7 @@ self.addEventListener("activate", (e) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
+          if (cacheName !== CACHE_NAME && cacheName.startsWith("indramahkota-footballclubs")) {
             return caches.delete(cacheName);
           }
         })
