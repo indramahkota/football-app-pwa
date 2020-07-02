@@ -1,5 +1,5 @@
-let cacheName = "indramahkota-v1";
-let filesToCache = [
+const CACHE_NAME = "indramahkota-v1";
+const filesToCache = [
   "/",
   "/bundle.js",
   "/worker.js",
@@ -28,17 +28,18 @@ let filesToCache = [
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
-    caches.open(cacheName).then((cache) => cache.addAll(filesToCache))
+    caches.open(CACHE_NAME)
+          .then((cache) => cache.addAll(filesToCache))
   );
 });
 
 self.addEventListener("activate", (e) => {
   e.waitUntil(
-    caches.keys().then((keyList) => {
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        keyList.map((key) => {
-          if (key !== cacheName) {
-            return caches.delete(key);
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
           }
         })
       );
@@ -49,6 +50,7 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
   e.respondWith(
-    caches.match(e.request).then((response) => response || fetch(e.request))
+    caches.match(e.request, { cacheName: CACHE_NAME })
+          .then((response) => response || fetch(e.request))
   );
 });
