@@ -14,8 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let modalElems = document.querySelectorAll(".modal");
   M.Modal.init(modalElems, {
     onCloseEnd: () => {
-      let content = document.querySelector("#body-content");
-      content.innerHTML = "";
+      location = "/";
     },
   });
 

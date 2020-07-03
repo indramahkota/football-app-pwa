@@ -27,11 +27,9 @@ const initNav = () => {
         content.innerHTML = "";
         content.innerHTML = `
           <div id="club-articles" class="card">
-            <a href="#">
-              <div class="card-image waves-effect waves-block waves-light">
-                <img src="${elm.strImage}" alt="Football Club Badge" />
-              </div>
-            </a>
+            <div class="card-image waves-effect waves-block waves-light">
+              <img src="${elm.strImage}" alt="Football Club Badge"/>
+            </div>
             <div class="card-content">
               <span class="card-title truncate">${elm.strName}</span>
               <p>${elm.strDescription}</p>
@@ -57,7 +55,7 @@ const initNav = () => {
               <div id="club-articles" class="card" data=${item.link}>
                 <a href="#${item.link}">
                   <div class="card-image waves-effect waves-block waves-light">
-                    <img src="${imagePath(item.strImage).default}" />
+                    <img src="${imagePath(item.strImage).default}" alt="Football Club Badge"/>
                   </div>
                 </a>
                 <div class="card-content">
