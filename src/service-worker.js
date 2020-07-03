@@ -26,19 +26,19 @@ const filesToCache = [
   "/icon_512x512.png"
 ];
 
-self.addEventListener("install", (e) => {
+self.addEventListener("install", e => {
   e.waitUntil(
     caches.open(CACHE_NAME)
-          .then((cache) => cache.addAll(filesToCache))
+          .then(cache => cache.addAll(filesToCache))
   );
 });
 
-self.addEventListener("activate", (e) => {
+self.addEventListener("activate", e => {
   e.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME && cacheName.startsWith("indramahkota-footballclubs")) {
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
             return caches.delete(cacheName);
           }
         })
@@ -47,10 +47,10 @@ self.addEventListener("activate", (e) => {
   );
 });
 
-self.addEventListener("fetch", (e) => {
+self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
   e.respondWith(
     caches.match(e.request, { cacheName: CACHE_NAME })
-          .then((response) => response || fetch(e.request))
+          .then(response => response || fetch(e.request))
   );
 });

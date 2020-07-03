@@ -5,24 +5,24 @@ import tentang from "../pages/tentang.html";
 import data from "../js/data-source.js";
 
 const images = require.context("../images", true);
-const imagePath = (name) => images(name, true);
+const imagePath = name => images(name, true);
 
 const initNav = () => {
   let elems = document.querySelectorAll(".sidenav");
   M.Sidenav.init(elems);
 
-  let setActive = (id) => {
-    document.querySelectorAll(".sidenav li, .topnav li").forEach((elm) => {
+  let setActive = id => {
+    document.querySelectorAll(".sidenav li, .topnav li").forEach(elm => {
       elm.classList.remove("active");
     });
-    document.querySelectorAll(`#${id}`).forEach((elm) => {
+    document.querySelectorAll(`#${id}`).forEach(elm => {
       elm.className += " active";
     });
   };
 
-  let viewItem = (index) => {
+  let viewItem = index => {
     let content = document.querySelector("#body-content");
-    data.forEach((elm) => {
+    data.forEach(elm => {
       if (elm.link === index) {
         content.innerHTML = "";
         content.innerHTML = `
@@ -42,7 +42,7 @@ const initNav = () => {
     });
   };
 
-  let loadPage = (page) => {
+  let loadPage = page => {
     let content = document.querySelector("#body-content");
 
     switch (page) {
@@ -51,7 +51,7 @@ const initNav = () => {
         setActive("beranda-menu");
 
         let articlesHTML = "";
-        data.forEach((item) => {
+        data.forEach(item => {
           articlesHTML += `
             <div class="col l6 m6 s12">
               <div id="club-articles" class="card" data=${item.link}>
@@ -70,8 +70,8 @@ const initNav = () => {
         });
 
         document.getElementById("articles").innerHTML = articlesHTML;
-        document.querySelectorAll("#club-articles").forEach((elm) => {
-          elm.addEventListener("click", (event) => {
+        document.querySelectorAll("#club-articles").forEach(elm => {
+          elm.addEventListener("click", () => {
             let index = elm.getAttribute("data");
             viewItem(index);
           });
@@ -100,12 +100,8 @@ const initNav = () => {
     }
   };
 
-  let page = window.location.hash.substr(1);
-  if (page === "") page = "beranda";
-  loadPage(page);
-
-  document.querySelectorAll(".sidenav a, .topnav a").forEach((elm) => {
-    elm.addEventListener("click", (event) => {
+  document.querySelectorAll(".sidenav a, .topnav a").forEach(elm => {
+    elm.addEventListener("click", event => {
       let sidenav = document.querySelector(".sidenav");
       M.Sidenav.getInstance(sidenav).close();
 
@@ -117,9 +113,20 @@ const initNav = () => {
     });
   });
 
-  document.querySelector("#beranda-logo").addEventListener("click", (event) => {
+  document.querySelector("#beranda-logo").addEventListener("click", () => {
     loadPage("beranda");
   });
+
+  let init = () => {
+    let page = window.location.hash.substr(1);
+    if (page === "") page = "beranda";
+    loadPage(page);
+  }
+  init();
+
+  window.onhashchange = () => {
+    init();
+  }
 };
 
 export default initNav;
