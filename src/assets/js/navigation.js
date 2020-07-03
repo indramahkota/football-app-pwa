@@ -108,7 +108,7 @@ const initNav = () => {
       let reference = event.target.getAttribute("href");
       if (!reference) return;
 
-      page = reference.substr(1);
+      let page = reference.substr(1);
       loadPage(page);
     });
   });
