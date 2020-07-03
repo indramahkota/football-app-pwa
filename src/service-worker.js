@@ -1,4 +1,4 @@
-const CACHE_NAME = "indramahkota-footballclubs-v1";
+const CACHE_NAME = "indramahkota-footballapp-v1";
 const filesToCache = [
   "/",
   "/bundle.js",

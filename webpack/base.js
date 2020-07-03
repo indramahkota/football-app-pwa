@@ -48,9 +48,9 @@ module.exports = {
       filename: "index.html",
     }),
     new WebpackPwaManifest({
-      name: "Football Clubs",
-      short_name: "Football Clubs",
-      description: "Football Clubs by Indra Mahkota",
+      name: "Football App",
+      short_name: "Football App",
+      description: "Football App by Indra Mahkota",
       icons: [
         {
           src: "./src/assets/icons/manifest-icons/android-icon-36x36.png",
