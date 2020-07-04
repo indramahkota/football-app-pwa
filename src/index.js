@@ -1,9 +1,9 @@
 import "materialize-css/dist/css/materialize.min.css";
 import "material-icons/iconfont/material-icons.css";
-import "./assets/css/styles.css";
+import "./styles/styles.css";
 
 import M from "materialize-css/dist/js/materialize.min.js";
-import initNav from "./assets/js/navigation.js";
+import initNav from "./scripts/navigation.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   let dropdownElems = document.querySelectorAll(".dropdown-trigger");
@@ -21,7 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initNav();
 });
 
-if ("serviceWorker" in navigator) {
+/* Sementara dinonaktifkan */
+/* if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("./worker.js")
@@ -34,4 +35,4 @@ if ("serviceWorker" in navigator) {
   });
 } else {
   console.log("ServiceWorker belum didukung browser ini.");
-}
+} */
