@@ -4,6 +4,32 @@ import "materialize-css/dist/css/materialize.min.css";
 import "material-icons/iconfont/material-icons.css";
 import "./styles/styles.css";
 
+const appBarTemplate = document.createElement("template");
+appBarTemplate.innerHTML = require("./components/app-bar/template.html");
+
+// console
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.appendChild(appBarTemplate.content.cloneNode(true));
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // import M from "materialize-css/dist/js/materialize.min.js";
 // import initNav from "./scripts/navigation.js";
 
