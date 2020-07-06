@@ -1,4 +1,4 @@
-.background > img {
+/* .background > img {
   max-width: 100%;
 }
 
@@ -22,7 +22,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
@@ -39,4 +39,4 @@
   white-space: nowrap;
   z-index: 1000;
   will-change: width, height;
-}
+} */

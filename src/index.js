@@ -2,8 +2,8 @@ import "materialize-css/dist/css/materialize.min.css";
 import "material-icons/iconfont/material-icons.css";
 import "./styles/styles.css";
 
-import M from "materialize-css/dist/js/materialize.min.js";
-import initNav from "./scripts/navigation.js";
+// import M from "materialize-css/dist/js/materialize.min.js";
+// import initNav from "./scripts/navigation.js";
 
 /* document.addEventListener("DOMContentLoaded", () => {
   let dropdownElems = document.querySelectorAll(".dropdown-trigger");

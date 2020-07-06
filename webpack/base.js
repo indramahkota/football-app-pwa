@@ -2,7 +2,6 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const WebpackPwaManifest = require("webpack-pwa-manifest");
-/* const MiniCssExtractPlugin = require("mini-css-extract-plugin"); */
 
 module.exports = {
   entry: {
@@ -17,20 +16,8 @@ module.exports = {
   devtool: "eval-source-map",
   module: {
     rules: [
-      /* {
-        test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
-      }, */
-      /* rules component style */
       {
         test: /\.css$/i,
-        exclude: /styles/,
-        use: ["to-string-loader", "css-loader"]
-      },
-      /* rules global style */
-      {
-        test: /\.css$/i,
-        include: /styles/,
         use: ["style-loader", "css-loader"]
       },
       {
@@ -106,7 +93,7 @@ module.exports = {
           sizes: "512x512",
           type: "image/png",
           density: "4.0"
-        },
+        }
       ],
       start_url: "/index.html",
       display: "standalone",
