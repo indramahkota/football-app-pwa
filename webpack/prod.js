@@ -1,6 +1,7 @@
 const merge = require("webpack-merge");
 const base = require("./base");
 const TerserPlugin = require("terser-webpack-plugin");
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = merge(base, {
   mode: "production",
@@ -18,6 +19,14 @@ module.exports = merge(base, {
           }
         },
         extractComments: false
+      }),
+      new OptimizeCssAssetsPlugin({
+        assetNameRegExp: /\.css$/g,
+        cssProcessor: require("cssnano"),
+        cssProcessorPluginOptions: {
+          preset: ["default", { discardComments: { removeAll: true } }]
+        },
+        canPrint: true
       })
     ]
   },
