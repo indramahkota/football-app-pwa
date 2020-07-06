@@ -4,50 +4,31 @@ import "materialize-css/dist/css/materialize.min.css";
 import "material-icons/iconfont/material-icons.css";
 import "./styles/styles.css";
 
+import M from "materialize-css/dist/js/materialize.min.js";
+
 const appBarTemplate = document.createElement("template");
 appBarTemplate.innerHTML = require("./components/app-bar/template.html");
 
-// console
+const sideBarTemplate = document.createElement("template");
+sideBarTemplate.innerHTML = require("./components/side-bar/template.html");
+
+const modalTemplate = document.createElement("template");
+modalTemplate.innerHTML = require("./components/app-modal/template.html");
 
 document.addEventListener("DOMContentLoaded", () => {
   document.body.appendChild(appBarTemplate.content.cloneNode(true));
+  document.body.appendChild(sideBarTemplate.content.cloneNode(true));
+  document.body.appendChild(modalTemplate.content.cloneNode(true));
 
-});
+  let sidenav = document.querySelectorAll(".sidenav");
+  M.Sidenav.init(sidenav);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import M from "materialize-css/dist/js/materialize.min.js";
-// import initNav from "./scripts/navigation.js";
-
-/* document.addEventListener("DOMContentLoaded", () => {
-  let dropdownElems = document.querySelectorAll(".dropdown-trigger");
-  M.Dropdown.init(dropdownElems, {
+  let dropdown = document.querySelectorAll(".dropdown-trigger");
+  M.Dropdown.init(dropdown, {
     coverTrigger: false,
   });
-
-  let modalElems = document.querySelectorAll(".modal");
-  M.Modal.init(modalElems, {
-    onCloseEnd: () => {
-      location = "/";
-    },
-  });
-
-  initNav();
-}); */
+  
+});
 
 /* Sementara dinonaktifkan */
 /* if ("serviceWorker" in navigator) {

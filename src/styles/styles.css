@@ -1,4 +1,4 @@
-/* .background > img {
+.background > img {
   max-width: 100%;
 }
 
@@ -39,4 +39,4 @@
   white-space: nowrap;
   z-index: 1000;
   will-change: width, height;
-} */
+}
