@@ -21,12 +21,34 @@ module.exports = {
         use: ["style-loader", "css-loader"]
       },
       {
-        test: /\.(eot|ttf|woff|woff2|png|webp|ico|xml)$/i,
+        test: /\.(eot|ttf|woff|woff2)$/i,
         use: [
           {
             loader: "file-loader",
             options: {
-              name: "[name].[ext]"
+              name: "icons/fonticon/[name].[ext]"
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(ico)$/i,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "icons/favicon/[name].[ext]"
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(png|jpe?g|gif|webp)$/i,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "images/[name].[ext]"
             }
           }
         ]
@@ -44,7 +66,6 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "./src/template.html",
-      favicon: "./src/assets/icons/favicons/favicon.ico",
       filename: "index.html"
     }),
     new WebpackPwaManifest({
@@ -53,43 +74,50 @@ module.exports = {
       description: "Football App by Indra Mahkota",
       icons: [
         {
-          src: "./src/assets/icons/manifest-icons/android-icon-36x36.png",
+          src: path.resolve("src/assets/icons/manifest/icon-36x36.png"),
+          destination: path.join('icons', 'manifest'),
           sizes: "36x36",
           type: "image/png",
           density: "0.75"
         },
         {
-          src: "./src/assets/icons/manifest-icons/android-icon-48x48.png",
+          src: path.resolve("src/assets/icons/manifest/icon-48x48.png"),
+          destination: path.join('icons', 'manifest'),
           sizes: "48x48",
           type: "image/png",
           density: "1.0"
         },
         {
-          src: "./src/assets/icons/manifest-icons/android-icon-72x72.png",
+          src: path.resolve("src/assets/icons/manifest/icon-72x72.png"),
+          destination: path.join('icons', 'manifest'),
           sizes: "72x72",
           type: "image/png",
           density: "1.5"
         },
         {
-          src: "./src/assets/icons/manifest-icons/android-icon-96x96.png",
+          src: path.resolve("src/assets/icons/manifest/icon-96x96.png"),
+          destination: path.join('icons', 'manifest'),
           sizes: "96x96",
           type: "image/png",
           density: "2.0"
         },
         {
-          src: "./src/assets/icons/manifest-icons/android-icon-144x144.png",
+          src: path.resolve("src/assets/icons/manifest/icon-144x144.png"),
+          destination: path.join('icons', 'manifest'),
           sizes: "144x144",
           type: "image/png",
           density: "3.0"
         },
         {
-          src: "./src/assets/icons/manifest-icons/android-icon-192x192.png",
+          src: path.resolve("src/assets/icons/manifest/icon-192x192.png"),
+          destination: path.join('icons', 'manifest'),
           sizes: "192x192",
           type: "image/png",
           density: "4.0"
         },
         {
-          src: "./src/assets/icons/manifest-icons/android-icon-512x512.png",
+          src: path.resolve("src/assets/icons/manifest/icon-512x512.png"),
+          destination: path.join('icons', 'manifest'),
           sizes: "512x512",
           type: "image/png",
           density: "4.0"

@@ -1,3 +1,5 @@
+import "./assets/icons/favicons/favicon.ico";
+
 import "materialize-css/dist/css/materialize.min.css";
 import "material-icons/iconfont/material-icons.css";
 import "./styles/styles.css";
