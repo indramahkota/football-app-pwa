@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const WebpackPwaManifest = require("webpack-pwa-manifest");
+/* const MiniCssExtractPlugin = require("mini-css-extract-plugin"); */
 
 module.exports = {
   entry: {
@@ -16,10 +17,10 @@ module.exports = {
   devtool: "eval-source-map",
   module: {
     rules: [
-      {
+      /* {
         test: /\.css$/i,
         use: [MiniCssExtractPlugin.loader, 'css-loader']
-      },
+      }, */
       /* rules component style */
       {
         test: /\.css$/i,

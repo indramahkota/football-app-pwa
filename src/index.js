@@ -5,7 +5,7 @@ import "./styles/styles.css";
 import M from "materialize-css/dist/js/materialize.min.js";
 import initNav from "./scripts/navigation.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+/* document.addEventListener("DOMContentLoaded", () => {
   let dropdownElems = document.querySelectorAll(".dropdown-trigger");
   M.Dropdown.init(dropdownElems, {
     coverTrigger: false,
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   initNav();
-});
+}); */
 
 /* Sementara dinonaktifkan */
 /* if ("serviceWorker" in navigator) {
