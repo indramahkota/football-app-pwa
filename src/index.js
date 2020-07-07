@@ -1,5 +1,3 @@
-import "./assets/icons/favicons/favicon.ico";
-
 import "materialize-css/dist/css/materialize.min.css";
 import "material-icons/iconfont/material-icons.css";
 import "./styles/styles.css";
@@ -8,18 +6,17 @@ import M from "materialize-css/dist/js/materialize.min.js";
 
 const appBarTemplate = document.createElement("template");
 appBarTemplate.innerHTML = require("./components/app-bar/template.html");
+document.body.appendChild(appBarTemplate.content.cloneNode(true));
 
 const sideBarTemplate = document.createElement("template");
 sideBarTemplate.innerHTML = require("./components/side-bar/template.html");
+document.body.appendChild(sideBarTemplate.content.cloneNode(true));
 
 const modalTemplate = document.createElement("template");
 modalTemplate.innerHTML = require("./components/app-modal/template.html");
+document.body.appendChild(modalTemplate.content.cloneNode(true));
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.body.appendChild(appBarTemplate.content.cloneNode(true));
-  document.body.appendChild(sideBarTemplate.content.cloneNode(true));
-  document.body.appendChild(modalTemplate.content.cloneNode(true));
-
   let sidenav = document.querySelectorAll(".sidenav");
   M.Sidenav.init(sidenav);
 
