@@ -1,5 +1,5 @@
 import M from "materialize-css/dist/js/materialize.min.js";
-import navigationApp from "./scripts/navigation.js";
+import navigationApp from "./scripts/app-navigation.js";
 
 import "materialize-css/dist/css/materialize.min.css";
 import "material-icons/iconfont/material-icons.css";
@@ -10,15 +10,15 @@ document.querySelector("aside").innerHTML = require("./components/side-bar/templ
 document.querySelector("modal").innerHTML = require("./components/app-modal/template.html");
 
 document.addEventListener("DOMContentLoaded", () => {
-  let sidenav = document.querySelectorAll(".sidenav");
+  const sidenav = document.querySelectorAll(".sidenav");
   M.Sidenav.init(sidenav);
 
-  let dropdown = document.querySelectorAll(".dropdown-trigger");
+  const dropdown = document.querySelectorAll(".dropdown-trigger");
   M.Dropdown.init(dropdown, {
     coverTrigger: false,
   });
 
-  var modal = document.querySelectorAll(".modal");
+  const modal = document.querySelectorAll(".modal");
   M.Modal.init(modal);
 
   navigationApp();

@@ -1,3 +1,7 @@
+.liked {
+  cursor: pointer;
+}
+
 .background > img {
   max-width: 100%;
 }

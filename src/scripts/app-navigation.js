@@ -1,17 +1,25 @@
-import setButtonActive from "./set-state-active.js";
+import setButtonActive from "./button-state.js";
 
 const navigationApp = () => {
     const sidenav = document.querySelector(".sidenav");
-    setButtonActive("pertandingan-menu");
+    setButtonActive("menu-pertandingan");
 
     document.querySelectorAll(".sidenav a, .topnav a").forEach(element => {
+        const parent = element.parentElement;
+
+        /* return if parent a element hasn't menu text in id */
+        if(!parent.id.includes("menu")) return;
+
         /* add event listener on each a element in topnav dan sidenav */
+        /* only id with menu-... */
         element.addEventListener("click", () => {
             M.Sidenav.getInstance(sidenav).close();
             /* set parent a element "li" for active state */
-            setButtonActive(element.parentElement.getAttribute("id"));
+            setButtonActive(parent.getAttribute("id"));
         });
     });
+
+
 }
 
 export default navigationApp;

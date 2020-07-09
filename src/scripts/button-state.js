@@ -1,7 +1,4 @@
 const setButtonActive = id => {
-    /* return if no id reference === null */
-    if(id === null) return;
-
     document.querySelectorAll(".sidenav li, .topnav li").forEach(element => {
         /* check if element has id and includes menu-... */
         if(element.id.includes("menu")) {
