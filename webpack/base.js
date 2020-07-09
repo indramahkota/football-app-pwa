@@ -19,12 +19,6 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        exclude: /styles/,
-        use: ["to-string-loader", "css-loader"]
-      },
-      {
-        test: /\.css$/i,
-        include: /styles/,
         use: [MiniCssExtractPlugin.loader, "css-loader"]
       },
       {
