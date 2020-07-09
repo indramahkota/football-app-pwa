@@ -1,3 +1,52 @@
+import setButtonActive from "./set-state-active.js";
+
+const navigationApp = () => {
+    const sidenav = document.querySelector(".sidenav");
+    setButtonActive("pertandingan-menu");
+
+    document.querySelectorAll(".sidenav a, .topnav a").forEach(element => {
+        /* add event listener on each a element in topnav dan sidenav */
+        element.addEventListener("click", () => {
+            M.Sidenav.getInstance(sidenav).close();
+            /* set parent a element "li" for active state */
+            setButtonActive(element.parentElement.getAttribute("id"));
+        });
+    });
+}
+
+export default navigationApp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // import setButtonActive from "./set-state-active.js";
 
 // const initMain = () => {

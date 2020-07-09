@@ -1,4 +1,5 @@
 import M from "materialize-css/dist/js/materialize.min.js";
+import navigationApp from "./scripts/navigation.js";
 
 import "materialize-css/dist/css/materialize.min.css";
 import "material-icons/iconfont/material-icons.css";
@@ -16,7 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
   M.Dropdown.init(dropdown, {
     coverTrigger: false,
   });
-  
+
+  var modal = document.querySelectorAll(".modal");
+  M.Modal.init(modal);
+
+  navigationApp();
 });
 
 /* Sementara dinonaktifkan */
