@@ -5,7 +5,9 @@ import "materialize-css/dist/css/materialize.min.css";
 import "material-icons/iconfont/material-icons.css";
 import "./styles/styles.css";
 
+/* require element based on component template */
 document.querySelector("header").innerHTML = require("./components/app-bar/template.html");
+document.querySelector("main").innerHTML = require("./components/main-app/template.html");
 document.querySelector("aside").innerHTML = require("./components/side-bar/template.html");
 document.querySelector("modal").innerHTML = require("./components/app-modal/template.html");
 
