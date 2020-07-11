@@ -1,4 +1,4 @@
-import footballAppConstant from "./app-constants.js";
+import getFootballData from "./app-datasource.js";
 
 const generateTeamPage = (jsonData) => {
     let content = document.querySelector("#pageContent");
@@ -25,22 +25,9 @@ const generateTeamPage = (jsonData) => {
 const setTeamPage = () => {
     console.log("team page");
 
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = `${footballAppConstant.baseUrl}competitions/2021/teams`;
-    fetch(proxyurl + url, {
-        headers: {
-        "X-Auth-Token": footballAppConstant.apiKey
-        }
-    }).then(response => {
-        return response.json();
-    }).then(responseJson => {
-        if(responseJson.teams) {
-            generateTeamPage(responseJson.teams);
-        } else {
-            console.log("error: promise rejeted.");
-        }
-    })
-    .catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"));
+    getFootballData("competitions/2021/teams")
+        .then(data => generateTeamPage(data.teams))
+        .catch(error => console.log(error));
 }
 
 export default setTeamPage;
