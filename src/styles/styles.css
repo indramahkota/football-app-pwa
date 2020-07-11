@@ -3,9 +3,9 @@
 }
 
 .card-image > img {
-  margin: 8px;
-  width: 100px;
-  height: 100px;
+  padding: 16px;
+  width: 120px;
+  height: 150px;
   object-fit: contain;
 }
 

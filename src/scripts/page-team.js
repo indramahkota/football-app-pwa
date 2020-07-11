@@ -4,24 +4,29 @@ const generateTeamPage = (parent, jsonData) => {
     let htmlHelper = "";
     jsonData.forEach(element => {
         htmlHelper += `
-        <div class="col l6 m6 s12">
-            <div id="club-articles" class="card">
-                <div class="card-image waves-effect waves-block waves-light">
-                    <img src="${element.crestUrl}" alt="Football Club Badge"/>
-                </div>
-                <div class="divider"></div>
-                <div class="card-content">
-                    <span class="card-title truncate">${element.name}</span>
-                    <p class="cut-text">Address: ${element.address}</p>
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="${element.crestUrl}">
+                        <a class="btn-floating halfway-fab waves-effect waves-light red">
+                            <i class="material-icons">add</i>
+                        </a>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="card-content">
+                        <span class="card-title truncate">${element.name}</span>
+                        <p class="cut-text">Address: ${element.address}</p>
+                    </div>
                 </div>
             </div>
-        </div>
         `;
     }); 
     parent.innerHTML = htmlHelper;
+    document.querySelector("#preloader").style.display = "none";
 }
 
 const setTeamPage = () => {
+    document.querySelector("#preloader").style.display = "block";
     let parent = document.querySelector("#pageContent");
     parent.innerHTML = "";
 
