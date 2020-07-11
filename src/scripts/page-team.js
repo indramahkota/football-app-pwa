@@ -8,13 +8,14 @@ const generateTeamPage = (parent, jsonData) => {
                 <div class="card">
                     <div class="card-image">
                         <img src="${element.crestUrl}">
-                        <a class="btn-floating halfway-fab waves-effect waves-light red">
-                            <i class="material-icons">add</i>
+                        <a class="btn-floating halfway-fab waves-effect waves-light cyan lighten-2">
+                            <i class="material-icons">favorite_border</i>
                         </a>
                     </div>
                     <div class="divider"></div>
                     <div class="card-content">
                         <span class="card-title truncate">${element.name}</span>
+                        <p class="cut-text">Area: ${element.area.name}</p>
                         <p class="cut-text">Address: ${element.address}</p>
                     </div>
                 </div>
