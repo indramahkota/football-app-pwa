@@ -42,6 +42,12 @@ const navigationApp = () => {
                 setTeamPage();
                 setButtonActive("menu-team");
                 break;
+            
+            case "keluar":
+                let modal = document.querySelector("#keluar-modal");
+                M.Sidenav.getInstance(sidenav).close();
+                M.Modal.getInstance(modal).open();
+                break;
 
             default :
                 break;

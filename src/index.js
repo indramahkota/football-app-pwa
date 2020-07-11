@@ -21,7 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const modal = document.querySelectorAll(".modal");
-  M.Modal.init(modal);
+  M.Modal.init(modal, {
+    onCloseEnd: () => {
+      location = "/"
+    }
+  });
 
   navigationApp();
 });
