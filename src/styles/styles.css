@@ -1,22 +1,26 @@
-.liked {
-  cursor: pointer;
-}
-
 .background > img {
   max-width: 100%;
 }
 
 .card-image > img {
+  margin: 8px;
   width: 100px;
   height: 100px;
   object-fit: contain;
 }
 
-#button-offline {
-  width: 100%;
-  padding-left: 16px;
-  padding-right: 16px;
+.card-content {
+  min-height: 150px;
 }
+
+.cut-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
 
 .dropdown-content {
   background-color: #ffffff;
@@ -31,4 +35,14 @@
   white-space: nowrap;
   z-index: 1000;
   will-change: width, height;
+}
+
+#pageContent {
+  margin-top: 12px;
+}
+
+#button-offline {
+  width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
 }

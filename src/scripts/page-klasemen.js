@@ -1,15 +1,15 @@
 import getFootballData from "./app-datasource.js";
 
-const generateKlasemenPage = () => {
-    let content = document.querySelector("#pageContent");
-    content.innerHTML = "";
+const generateKlasemenPage = (parent, jsonData) => {
+    
 }
 
 const setKlasemenPage = () => {
-    console.log("klasemen page");
+    let parent = document.querySelector("#pageContent");
+    parent.innerHTML = "";
 
     getFootballData("competitions/2021/standings")
-        .then(data => generateKlasemenPage(data.standings))
+        .then(data => generateKlasemenPage(parent, data.standings))
         .catch(error => console.log(error));
 }
 

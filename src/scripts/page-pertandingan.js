@@ -1,15 +1,15 @@
 import getFootballData from "./app-datasource.js";
 
-const generatePertandinganPage = () => {
-    let content = document.querySelector("#pageContent");
-    content.innerHTML = "";
+const generatePertandinganPage = (parent, jsonData) => {
+    
 }
 
 const setPertandinganPage = () => {
-    console.log("pertandingan page");
+    let parent = document.querySelector("#pageContent");
+    parent.innerHTML = "";
 
     getFootballData("competitions/2021/matches")
-        .then(data => generatePertandinganPage(data.matches))
+        .then(data => generatePertandinganPage(parent, data.matches))
         .catch(error => console.log(error));
 }
 
