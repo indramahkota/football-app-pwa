@@ -12,9 +12,6 @@ const getFootballData = (endPoint) => {
         "X-Auth-Token": footballAppConstant.apiKey
         }
     })
-    .then(response => response.json())
-    .then(responseJson => Promise.resolve(responseJson))
-    .catch(error => Promise.reject(error));
 }
 
 export default getFootballData;

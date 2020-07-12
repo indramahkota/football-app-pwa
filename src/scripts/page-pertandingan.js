@@ -1,21 +1,48 @@
 import getFootballData from "./app-datasource.js";
 
-const generatePertandinganPage = (parent, jsonData) => {
-    let htmlHelper = `
-        <div class="row">
-            <div class="input-field col s12">
-                <select>
-                    <option value="" disabled selected>Pilih opsi disini</option>
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                    <option value="3">Option 3</option>
-                </select>
-                <label>Pilih Kompetisi</label>
+const generatePertandinganPage = (parent) => {
+    const htmlHelper = `
+        <div id="select-content" class="row"></div>
+        <div id="match-content" class="row"></div>
+        <div class="container center-align" id="match-preloader">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-blue-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
     `;
+    parent.innerHTML = htmlHelper;
+}
 
+const generateSelectCompetition = (parent, jsonData) => {
+    let htmlHelper = `
+        <div class="input-field col s12">
+            <select id="select-competition">
+    `;
+    jsonData.forEach(element => {
+        htmlHelper += `
+                <option value="${element.id}">${element.name}</option>
+        `;
+    });
+    htmlHelper += `
+            </select>
+            <label>Pilih Kompetisi</label>
+        </div>
+    `;
+    parent.innerHTML = htmlHelper;
+}
+
+const generateMatchContent = (parent, jsonData) => {
+    let htmlHelper = "";
     jsonData.forEach(element => {
         htmlHelper += `
             <div class="col s12 m6">
@@ -36,29 +63,51 @@ const generatePertandinganPage = (parent, jsonData) => {
             </div>
         `;
     });
-
-    htmlHelper += `
-        </div>
-    `;
-
     parent.innerHTML = htmlHelper;
-    document.querySelector("#preloader").style.display = "none";
-
-    activateSelectFunctionality();
 }
 
 const activateSelectFunctionality = () => {
-    var select = document.querySelectorAll("select");
+    const select = document.querySelectorAll("select");
     M.FormSelect.init(select);
+
+    const instance = document.querySelector("#select-competition");
+    instance.addEventListener("change", event => {
+        changeMatchContent(event.target.value);
+    });
+}
+
+const changeMatchContent = id => {
+    document.querySelector("#match-content").innerHTML = "";
+    document.querySelector("#match-preloader").style.display = "block";
+    getFootballData(`competitions/${id}/matches`)
+        .then(response => response.json())
+        .then(data =>{
+            generateMatchContent(document.querySelector("#match-content"), data.matches);
+            document.querySelector("#match-preloader").style.display = "none";
+        })
+        .catch(error => console.log(error));
 }
 
 const setPertandinganPage = () => {
-    document.querySelector("#preloader").style.display = "block";
     let parent = document.querySelector("#pageContent");
     parent.innerHTML = "";
 
-    getFootballData("competitions/2021/matches")
-        .then(data => generatePertandinganPage(parent, data.matches))
+    generatePertandinganPage(parent);
+    document.querySelector("#match-preloader").style.display = "block";
+    
+    getFootballData("competitions")
+        .then(response => response.json())
+        .then(data => data.competitions.filter((key) => key.plan === "TIER_ONE"))
+        .then(data => {
+            generateSelectCompetition(document.querySelector("#select-content"), data);
+            return getFootballData(`competitions/${data[0].id}/matches`);
+        })
+        .then(response => response.json())
+        .then(data =>{
+            generateMatchContent(document.querySelector("#match-content"), data.matches);
+            document.querySelector("#match-preloader").style.display = "none";
+            activateSelectFunctionality();
+        })
         .catch(error => console.log(error));
 }
 
