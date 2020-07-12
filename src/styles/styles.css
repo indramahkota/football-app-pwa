@@ -46,3 +46,9 @@
   padding-left: 16px;
   padding-right: 16px;
 }
+
+.dropdown-content {
+  max-height: 350px !important;
+  overflow-y: auto !important;
+  backface-visibility: hidden !important;
+}

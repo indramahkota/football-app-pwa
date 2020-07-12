@@ -1,77 +1,129 @@
 import getFootballData from "./app-datasource.js";
 
-const generateKlasemenPage = (parent, jsonData) => {
-    let htmlHelper = `
-        <div class="row">
-            <div class="input-field col s12">
-                <select>
-                    <option value="" disabled selected>Pilih opsi disini</option>
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                    <option value="3">Option 3</option>
-                </select>
-                <label>Pilih Kompetisi</label>
+const generateClassementPage = (parent) => {
+    const htmlHelper = `
+        <div id="select-content" class="row"></div>
+        <div id="classement-content" class="row"></div>
+        <div class="container center-align" id="classement-preloader">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-blue-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Club</th>
-                        <th>MP</th>
-                        <th>W</th>
-                        <th>D</th>
-                        <th>L</th>
-                        <th>GF</th>
-                        <th>GA</th>
-                        <th>GD</th>
-                        <th>Pts</th>
-                    </tr>
-                </thead>
-                <tbody>
     `;
+    parent.innerHTML = htmlHelper;
+}
 
-    let tabledata = jsonData.table;
-    tabledata.forEach(element => {
+const generateSelectCompetition = (parent, jsonData) => {
+    let htmlHelper = `
+        <div class="input-field col s12">
+            <select id="select-competition">
+    `;
+    jsonData.forEach(element => {
         htmlHelper += `
-                    <tr>
-                        <td>${element.team.name}</td>
-                        <td>${element.playedGames}</td>
-                        <td>${element.won}</td>
-                        <td>${element.draw}</td>
-                        <td>${element.lost}</td>
-                        <td>${element.goalsFor}</td>
-                        <td>${element.goalsAgainst}</td>
-                        <td>${element.goalDifference}</td>
-                        <td>${element.points}</td>
-                    </tr>
+                <option value="${element.id}">${element.name}</option>
         `;
     });
-
     htmlHelper += `
-                </tbody>
-            </table>
+            </select>
+            <label>Pilih Kompetisi</label>
         </div>
     `;
-
     parent.innerHTML = htmlHelper;
-    document.querySelector("#preloader").style.display = "none";
+}
 
-    activateSelectFunctionality();
+const generateClassementContent = (parent, jsonData) => {
+    let htmlHelper = `
+        <table>
+            <thead>
+                <tr>
+                    <th>Club</th>
+                    <th>MP</th>
+                    <th>W</th>
+                    <th>D</th>
+                    <th>L</th>
+                    <th>GF</th>
+                    <th>GA</th>
+                    <th>GD</th>
+                    <th>Pts</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    const tabledata = jsonData.table;
+    tabledata.forEach(element => {
+        htmlHelper += `
+                <tr>
+                    <td>${element.team.name}</td>
+                    <td>${element.playedGames}</td>
+                    <td>${element.won}</td>
+                    <td>${element.draw}</td>
+                    <td>${element.lost}</td>
+                    <td>${element.goalsFor}</td>
+                    <td>${element.goalsAgainst}</td>
+                    <td>${element.goalDifference}</td>
+                    <td>${element.points}</td>
+                </tr>
+        `;
+    });
+    htmlHelper += `
+            </tbody>
+        </table>
+    `;
+    parent.innerHTML = htmlHelper;
 }
 
 const activateSelectFunctionality = () => {
-    var select = document.querySelectorAll("select");
+    const select = document.querySelectorAll("select");
     M.FormSelect.init(select);
+
+    const instance = document.querySelector("#select-competition");
+    instance.addEventListener("change", event => {
+        changeClassementContent(event.target.value);
+    });
+}
+
+const changeClassementContent = id => {
+    document.querySelector("#classement-content").innerHTML = "";
+    document.querySelector("#classement-preloader").style.display = "block";
+    getFootballData(`competitions/${id}/standings`)
+        .then(response => response.json())
+        .then(data =>{
+            generateClassementContent(document.querySelector("#classement-content"), data.standings[0]);
+            document.querySelector("#classement-preloader").style.display = "none";
+        })
+        .catch(error => console.log(error));
 }
 
 const setKlasemenPage = () => {
-    document.querySelector("#preloader").style.display = "block";
     let parent = document.querySelector("#pageContent");
     parent.innerHTML = "";
 
-    getFootballData("competitions/2021/standings")
-        .then(data => generateKlasemenPage(parent, data.standings[0]))
+    generateClassementPage(parent);
+    document.querySelector("#classement-preloader").style.display = "block";
+
+    getFootballData("competitions")
+        .then(response => response.json())
+        .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
+        .then(data => {
+            generateSelectCompetition(document.querySelector("#select-content"), data);
+            return getFootballData(`competitions/${data[0].id}/standings`);
+        })
+        .then(response => response.json())
+        .then(data => {
+            generateClassementContent(document.querySelector("#classement-content"), data.standings[0]);
+            document.querySelector("#classement-preloader").style.display = "none";
+            activateSelectFunctionality();
+        })
         .catch(error => console.log(error));
 }
 

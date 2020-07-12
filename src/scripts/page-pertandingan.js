@@ -1,6 +1,6 @@
 import getFootballData from "./app-datasource.js";
 
-const generatePertandinganPage = (parent) => {
+const generateMatchPage = (parent) => {
     const htmlHelper = `
         <div id="select-content" class="row"></div>
         <div id="match-content" class="row"></div>
@@ -92,18 +92,18 @@ const setPertandinganPage = () => {
     let parent = document.querySelector("#pageContent");
     parent.innerHTML = "";
 
-    generatePertandinganPage(parent);
+    generateMatchPage(parent);
     document.querySelector("#match-preloader").style.display = "block";
     
     getFootballData("competitions")
         .then(response => response.json())
-        .then(data => data.competitions.filter((key) => key.plan === "TIER_ONE"))
+        .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
         .then(data => {
             generateSelectCompetition(document.querySelector("#select-content"), data);
             return getFootballData(`competitions/${data[0].id}/matches`);
         })
         .then(response => response.json())
-        .then(data =>{
+        .then(data => {
             generateMatchContent(document.querySelector("#match-content"), data.matches);
             document.querySelector("#match-preloader").style.display = "none";
             activateSelectFunctionality();
