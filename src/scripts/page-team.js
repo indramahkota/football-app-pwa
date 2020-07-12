@@ -1,7 +1,21 @@
 import getFootballData from "./app-datasource.js";
 
 const generateTeamPage = (parent, jsonData) => {
-    let htmlHelper = "";
+    let htmlHelper = `
+        <div class="row">
+            <div class="input-field col s12">
+                <select>
+                    <option value="" disabled selected>Pilih opsi disini</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select>
+                <label>Pilih Kompetisi</label>
+            </div>
+        </div>
+        <div class="row">
+    `;
+
     jsonData.forEach(element => {
         htmlHelper += `
             <div class="col s12 m6">
@@ -21,9 +35,21 @@ const generateTeamPage = (parent, jsonData) => {
                 </div>
             </div>
         `;
-    }); 
+    });
+
+    htmlHelper += `
+        </div>
+    `;
+
     parent.innerHTML = htmlHelper;
     document.querySelector("#preloader").style.display = "none";
+
+    activateSelectFunctionality();
+}
+
+const activateSelectFunctionality = () => {
+    var select = document.querySelectorAll("select");
+    M.FormSelect.init(select);
 }
 
 const setTeamPage = () => {

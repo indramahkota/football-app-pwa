@@ -6,10 +6,14 @@ const setButtonActive = id => {
         }
     });
 
-    /* set active onlu for given id */
+    /* set active only for given id */
     document.querySelectorAll(`#${id}`).forEach(element => {
         element.className += " active";
     });
 };
 
-export default setButtonActive;
+const setTitleForActivePage = page => {
+    document.title = `Football App | ${page}`;
+}
+
+export {setButtonActive, setTitleForActivePage};

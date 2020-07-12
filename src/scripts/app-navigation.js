@@ -1,4 +1,4 @@
-import setButtonActive from "./button-state.js";
+import {setButtonActive, setTitleForActivePage} from "./app-state.js";
 import setPertandinganPage from "./page-pertandingan.js";
 import setKlasemenPage from "./page-klasemen.js";
 import setTeamPage from "./page-team.js";
@@ -30,16 +30,19 @@ const navigationApp = () => {
         switch (page) {
             case "pertandingan":
                 setPertandinganPage();
+                setTitleForActivePage("Pertandingan");
                 setButtonActive("menu-pertandingan");
                 break;
 
             case "klasemen":
                 setKlasemenPage();
+                setTitleForActivePage("Klasemen");
                 setButtonActive("menu-klasemen");
                 break;
 
             case "team":
                 setTeamPage();
+                setTitleForActivePage("Team");
                 setButtonActive("menu-team");
                 break;
             
