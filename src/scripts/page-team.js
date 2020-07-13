@@ -1,27 +1,22 @@
 import getFootballData from "./app-datasource.js";
+import generateInitialPage from "./gen-initial-page.js";
+import generateSelectCompetition from "./gen-select-competitions.js";
 
-const generateTeamPage = (parent, jsonData) => {
-    let htmlHelper = `
-        <div class="row">
-            <div class="input-field col s12">
-                <select>
-                    <option value="" disabled selected>Pilih opsi disini</option>
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                    <option value="3">Option 3</option>
-                </select>
-                <label>Pilih Kompetisi</label>
-            </div>
-        </div>
-        <div class="row">
-    `;
+import nullImage from "../assets/images/null-image.jpg";
 
+const generateTeamContent = (parent, jsonData) => {
+    let htmlHelper = "";
     jsonData.forEach(element => {
+        /* Team Image dapat merespon 404 */
         htmlHelper += `
             <div class="col s12 m6">
                 <div class="card">
                     <div class="card-image">
-                        <img src="${element.crestUrl}">
+                        <img alt="Team Image" src="${element.crestUrl !== null
+                            && element.crestUrl !== ""
+                            ? element.crestUrl : nullImage}"
+                            onerror="this.onerror=null;this.src='${nullImage}';"
+                            >
                         <a class="btn-floating halfway-fab waves-effect waves-light cyan lighten-2">
                             <i class="material-icons">favorite_border</i>
                         </a>
@@ -36,29 +31,51 @@ const generateTeamPage = (parent, jsonData) => {
             </div>
         `;
     });
-
-    htmlHelper += `
-        </div>
-    `;
-
     parent.innerHTML = htmlHelper;
-    document.querySelector("#preloader").style.display = "none";
-
-    activateSelectFunctionality();
 }
 
 const activateSelectFunctionality = () => {
-    var select = document.querySelectorAll("select");
+    const select = document.querySelectorAll("select");
     M.FormSelect.init(select);
+
+    const instance = document.querySelector("#select-competition");
+    instance.addEventListener("change", event => {
+        changeTeamContent(event.target.value);
+    });
+}
+
+const changeTeamContent = id => {
+    document.querySelector("#page-content").innerHTML = "";
+    document.querySelector("#page-preloader").style.display = "block";
+    getFootballData(`competitions/${id}/teams`)
+        .then(response => response.json())
+        .then(data =>{
+            generateTeamContent(document.querySelector("#page-content"), data.teams);
+            document.querySelector("#page-preloader").style.display = "none";
+        })
+        .catch(error => console.log(error));
 }
 
 const setTeamPage = () => {
-    document.querySelector("#preloader").style.display = "block";
     let parent = document.querySelector("#pageContent");
     parent.innerHTML = "";
 
-    getFootballData("competitions/2021/teams")
-        .then(data => generateTeamPage(parent, data.teams))
+    generateInitialPage(parent);
+    document.querySelector("#page-preloader").style.display = "block";
+
+    getFootballData("competitions")
+        .then(response => response.json())
+        .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
+        .then(data => {
+            generateSelectCompetition(document.querySelector("#select-content"), data);
+            return getFootballData(`competitions/${data[0].id}/teams`);
+        })
+        .then(response => response.json())
+        .then(data => {
+            generateTeamContent(document.querySelector("#page-content"), data.teams);
+            document.querySelector("#page-preloader").style.display = "none";
+            activateSelectFunctionality();
+        })
         .catch(error => console.log(error));
 }
 

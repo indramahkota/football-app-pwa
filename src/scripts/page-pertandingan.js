@@ -1,45 +1,6 @@
 import getFootballData from "./app-datasource.js";
-
-const generateMatchPage = (parent) => {
-    const htmlHelper = `
-        <div id="select-content" class="row"></div>
-        <div id="match-content" class="row"></div>
-        <div class="container center-align" id="match-preloader">
-            <div class="preloader-wrapper big active">
-                <div class="spinner-layer spinner-blue-only">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="gap-patch">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    parent.innerHTML = htmlHelper;
-}
-
-const generateSelectCompetition = (parent, jsonData) => {
-    let htmlHelper = `
-        <div class="input-field col s12">
-            <select id="select-competition">
-    `;
-    jsonData.forEach(element => {
-        htmlHelper += `
-                <option value="${element.id}">${element.name}</option>
-        `;
-    });
-    htmlHelper += `
-            </select>
-            <label>Pilih Kompetisi</label>
-        </div>
-    `;
-    parent.innerHTML = htmlHelper;
-}
+import generateInitialPage from "./gen-initial-page.js";
+import generateSelectCompetition from "./gen-select-competitions.js";
 
 const generateMatchContent = (parent, jsonData) => {
     let htmlHelper = "";
@@ -77,13 +38,13 @@ const activateSelectFunctionality = () => {
 }
 
 const changeMatchContent = id => {
-    document.querySelector("#match-content").innerHTML = "";
-    document.querySelector("#match-preloader").style.display = "block";
+    document.querySelector("#page-content").innerHTML = "";
+    document.querySelector("#page-preloader").style.display = "block";
     getFootballData(`competitions/${id}/matches`)
         .then(response => response.json())
         .then(data =>{
-            generateMatchContent(document.querySelector("#match-content"), data.matches);
-            document.querySelector("#match-preloader").style.display = "none";
+            generateMatchContent(document.querySelector("#page-content"), data.matches);
+            document.querySelector("#page-preloader").style.display = "none";
         })
         .catch(error => console.log(error));
 }
@@ -92,8 +53,8 @@ const setPertandinganPage = () => {
     let parent = document.querySelector("#pageContent");
     parent.innerHTML = "";
 
-    generateMatchPage(parent);
-    document.querySelector("#match-preloader").style.display = "block";
+    generateInitialPage(parent);
+    document.querySelector("#page-preloader").style.display = "block";
     
     getFootballData("competitions")
         .then(response => response.json())
@@ -104,8 +65,8 @@ const setPertandinganPage = () => {
         })
         .then(response => response.json())
         .then(data => {
-            generateMatchContent(document.querySelector("#match-content"), data.matches);
-            document.querySelector("#match-preloader").style.display = "none";
+            generateMatchContent(document.querySelector("#page-content"), data.matches);
+            document.querySelector("#page-preloader").style.display = "none";
             activateSelectFunctionality();
         })
         .catch(error => console.log(error));

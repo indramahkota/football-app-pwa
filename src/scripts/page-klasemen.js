@@ -1,45 +1,6 @@
 import getFootballData from "./app-datasource.js";
-
-const generateClassementPage = (parent) => {
-    const htmlHelper = `
-        <div id="select-content" class="row"></div>
-        <div id="classement-content" class="row"></div>
-        <div class="container center-align" id="classement-preloader">
-            <div class="preloader-wrapper big active">
-                <div class="spinner-layer spinner-blue-only">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="gap-patch">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    parent.innerHTML = htmlHelper;
-}
-
-const generateSelectCompetition = (parent, jsonData) => {
-    let htmlHelper = `
-        <div class="input-field col s12">
-            <select id="select-competition">
-    `;
-    jsonData.forEach(element => {
-        htmlHelper += `
-                <option value="${element.id}">${element.name}</option>
-        `;
-    });
-    htmlHelper += `
-            </select>
-            <label>Pilih Kompetisi</label>
-        </div>
-    `;
-    parent.innerHTML = htmlHelper;
-}
+import generateInitialPage from "./gen-initial-page.js";
+import generateSelectCompetition from "./gen-select-competitions.js";
 
 const generateClassementContent = (parent, jsonData) => {
     let htmlHelper = `
@@ -59,8 +20,7 @@ const generateClassementContent = (parent, jsonData) => {
             </thead>
             <tbody>
     `;
-    const tabledata = jsonData.table;
-    tabledata.forEach(element => {
+    jsonData.table.forEach(element => {
         htmlHelper += `
                 <tr>
                     <td>${element.team.name}</td>
@@ -93,13 +53,13 @@ const activateSelectFunctionality = () => {
 }
 
 const changeClassementContent = id => {
-    document.querySelector("#classement-content").innerHTML = "";
-    document.querySelector("#classement-preloader").style.display = "block";
+    document.querySelector("#page-content").innerHTML = "";
+    document.querySelector("#page-preloader").style.display = "block";
     getFootballData(`competitions/${id}/standings`)
         .then(response => response.json())
         .then(data =>{
-            generateClassementContent(document.querySelector("#classement-content"), data.standings[0]);
-            document.querySelector("#classement-preloader").style.display = "none";
+            generateClassementContent(document.querySelector("#page-content"), data.standings[0]);
+            document.querySelector("#page-preloader").style.display = "none";
         })
         .catch(error => console.log(error));
 }
@@ -108,8 +68,8 @@ const setKlasemenPage = () => {
     let parent = document.querySelector("#pageContent");
     parent.innerHTML = "";
 
-    generateClassementPage(parent);
-    document.querySelector("#classement-preloader").style.display = "block";
+    generateInitialPage(parent);
+    document.querySelector("#page-preloader").style.display = "block";
 
     getFootballData("competitions")
         .then(response => response.json())
@@ -120,8 +80,8 @@ const setKlasemenPage = () => {
         })
         .then(response => response.json())
         .then(data => {
-            generateClassementContent(document.querySelector("#classement-content"), data.standings[0]);
-            document.querySelector("#classement-preloader").style.display = "none";
+            generateClassementContent(document.querySelector("#page-content"), data.standings[0]);
+            document.querySelector("#page-preloader").style.display = "none";
             activateSelectFunctionality();
         })
         .catch(error => console.log(error));

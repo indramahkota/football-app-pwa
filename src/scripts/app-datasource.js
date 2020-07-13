@@ -4,7 +4,7 @@ const getFootballData = (endPoint) => {
     /* avoid "No Access-Control-Allow-Origin header" */
     /* possible error: (Too Many Requests) */
     /* ref: https://stackoverflow.com/questions/43871637/no-access-control-allow-origin-header-is-present-on-the-requested-resource-whe */
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const proxyurl = "https://indratestapp.herokuapp.com/";
     const url = `${footballAppConstant.baseUrl}${endPoint}`;
 
     return fetch(proxyurl + url, {
