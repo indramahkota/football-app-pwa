@@ -1,6 +1,10 @@
 import getFootballData from "./app-datasource.js";
 import generateInitialPage from "./gen-initial-page.js";
 import generateSelectCompetition from "./gen-select-competitions.js";
+import fetchErrorHandler from "./app-error-handler.js";
+
+const controller = new AbortController();
+const signal = controller.signal;
 
 const generateMatchContent = (parent, jsonData) => {
     let htmlHelper = "";
@@ -27,21 +31,20 @@ const generateMatchContent = (parent, jsonData) => {
     parent.innerHTML = htmlHelper;
 }
 
-const activateSelectFunctionality = () => {
+const activateSelectFunctionality = (signal) => {
     const select = document.querySelectorAll("select");
     M.FormSelect.init(select);
 
     const instance = document.querySelector("#select-competition");
     instance.addEventListener("change", event => {
-        changeMatchContent(event.target.value);
+        changeMatchContent(signal, event.target.value);
     });
 }
 
-const changeMatchContent = id => {
+const changeMatchContent = (signal, id)=> {
     document.querySelector("#page-content").innerHTML = "";
     document.querySelector("#page-preloader").style.display = "block";
-    getFootballData(`competitions/${id}/matches`)
-        .then(response => response.json())
+    getFootballData(signal, `competitions/${id}/matches`)
         .then(data =>{
             generateMatchContent(document.querySelector("#page-content"), data.matches);
             document.querySelector("#page-preloader").style.display = "none";
@@ -49,27 +52,33 @@ const changeMatchContent = id => {
         .catch(error => console.log(error));
 }
 
-const setPertandinganPage = () => {
+const setPertandinganPage = (signal) => {
     let parent = document.querySelector("#pageContent");
     parent.innerHTML = "";
 
     generateInitialPage(parent);
     document.querySelector("#page-preloader").style.display = "block";
     
-    getFootballData("competitions")
-        .then(response => response.json())
+    getFootballData(signal, "competitions")
         .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
         .then(data => {
             generateSelectCompetition(document.querySelector("#select-content"), data);
-            return getFootballData(`competitions/${data[0].id}/matches`);
+            activateSelectFunctionality(signal);
+            return getFootballData(signal, `competitions/${data[0].id}/matches`);
         })
-        .then(response => response.json())
         .then(data => {
             generateMatchContent(document.querySelector("#page-content"), data.matches);
             document.querySelector("#page-preloader").style.display = "none";
-            activateSelectFunctionality();
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+            if (error.name === 'AbortError') {
+                console.log("Aborted!");
+            } else {
+                fetchErrorHandler();
+                document.querySelector("#page-preloader").style.display = "none";
+                console.log(error);
+            }
+        });
 }
 
 export default setPertandinganPage;

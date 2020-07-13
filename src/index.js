@@ -23,7 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal = document.querySelectorAll(".modal");
   M.Modal.init(modal, {
     onCloseEnd: () => {
-      location = "/"
+      if(location.hash.substr(1) === "keluar") {
+        location = "/"
+      } else {
+        location.reload();
+      }
     }
   });
 

@@ -3,6 +3,16 @@ import setPertandinganPage from "./page-pertandingan.js";
 import setKlasemenPage from "./page-klasemen.js";
 import setTeamPage from "./page-team.js";
 
+let currentController = new AbortController();
+let currentSignal = currentController.signal;
+
+const setCurrentControllerSignal = () => {
+    currentController.abort();
+    const newController = new AbortController();
+    currentController = newController;
+    currentSignal = currentController.signal;
+}
+
 const navigationApp = () => {
     const sidenav = document.querySelector(".sidenav");
     setButtonActive("menu-pertandingan");
@@ -24,30 +34,32 @@ const navigationApp = () => {
     });
 
     const initPage = () => {
-        let page = window.location.hash.substr(1);
+        let page = location.hash.substr(1);
         if (page === "") page = "pertandingan";
+
+        setCurrentControllerSignal();
 
         switch (page) {
             case "pertandingan":
-                setPertandinganPage();
+                setPertandinganPage(currentSignal);
                 setTitleForActivePage("Pertandingan");
                 setButtonActive("menu-pertandingan");
                 break;
 
             case "klasemen":
-                setKlasemenPage();
+                setKlasemenPage(currentSignal);
                 setTitleForActivePage("Klasemen");
                 setButtonActive("menu-klasemen");
                 break;
 
             case "team":
-                setTeamPage();
+                setTeamPage(currentSignal);
                 setTitleForActivePage("Team");
                 setButtonActive("menu-team");
                 break;
             
             case "keluar":
-                let modal = document.querySelector("#keluar-modal");
+                const modal = document.querySelector("#keluar-modal");
                 M.Sidenav.getInstance(sidenav).close();
                 M.Modal.getInstance(modal).open();
                 break;

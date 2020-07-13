@@ -1,6 +1,7 @@
 import getFootballData from "./app-datasource.js";
 import generateInitialPage from "./gen-initial-page.js";
 import generateSelectCompetition from "./gen-select-competitions.js";
+import fetchErrorHandler from "./app-error-handler.js";
 
 const generateClassementContent = (parent, jsonData) => {
     let htmlHelper = `
@@ -42,21 +43,24 @@ const generateClassementContent = (parent, jsonData) => {
     parent.innerHTML = htmlHelper;
 }
 
-const activateSelectFunctionality = () => {
+const activateSelectFunctionality = (signal) => {
     const select = document.querySelectorAll("select");
     M.FormSelect.init(select);
 
     const instance = document.querySelector("#select-competition");
+
+    /* avoid fast click, instance will be null */
+    if(instance === null) return;
+
     instance.addEventListener("change", event => {
-        changeClassementContent(event.target.value);
+        changeClassementContent(signal, event.target.value);
     });
 }
 
-const changeClassementContent = id => {
+const changeClassementContent = (signal, id) => {
     document.querySelector("#page-content").innerHTML = "";
     document.querySelector("#page-preloader").style.display = "block";
-    getFootballData(`competitions/${id}/standings`)
-        .then(response => response.json())
+    getFootballData(signal, `competitions/${id}/standings`)
         .then(data =>{
             generateClassementContent(document.querySelector("#page-content"), data.standings[0]);
             document.querySelector("#page-preloader").style.display = "none";
@@ -64,27 +68,33 @@ const changeClassementContent = id => {
         .catch(error => console.log(error));
 }
 
-const setKlasemenPage = () => {
+const setKlasemenPage = (signal) => {
     let parent = document.querySelector("#pageContent");
     parent.innerHTML = "";
 
     generateInitialPage(parent);
     document.querySelector("#page-preloader").style.display = "block";
 
-    getFootballData("competitions")
-        .then(response => response.json())
+    getFootballData(signal, "competitions")
         .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
         .then(data => {
             generateSelectCompetition(document.querySelector("#select-content"), data);
-            return getFootballData(`competitions/${data[0].id}/standings`);
+            activateSelectFunctionality(signal);
+            return getFootballData(signal, `competitions/${data[0].id}/standings`);
         })
-        .then(response => response.json())
         .then(data => {
             generateClassementContent(document.querySelector("#page-content"), data.standings[0]);
             document.querySelector("#page-preloader").style.display = "none";
-            activateSelectFunctionality();
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+            if (error.name === 'AbortError') {
+                console.log("Aborted!");
+            } else {
+                fetchErrorHandler();
+                document.querySelector("#page-preloader").style.display = "none";
+                console.log(error);
+            }
+        });
 }
 
 export default setKlasemenPage;
