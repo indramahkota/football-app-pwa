@@ -5,7 +5,7 @@ import fetchErrorHandler from "./app-error-handler.js";
 
 import nullImage from "../assets/images/null-image.jpg";
 
-const generateTeamContent = (parent, jsonData) => {
+const generateTimContent = (parent, jsonData) => {
     let htmlHelper = "";
     jsonData.forEach(element => {
         /* Team Image dapat merespon 404 */
@@ -41,22 +41,22 @@ const activateSelectFunctionality = (signal) => {
 
     const instance = document.querySelector("#select-competition");
     instance.addEventListener("change", event => {
-        changeTeamContent(signal, event.target.value);
+        changeTimContent(signal, event.target.value);
     });
 }
 
-const changeTeamContent = (signal, id) => {
+const changeTimContent = (signal, id) => {
     document.querySelector("#page-content").innerHTML = "";
     document.querySelector("#page-preloader").style.display = "block";
     getFootballData(signal, `competitions/${id}/teams`)
         .then(data =>{
-            generateTeamContent(document.querySelector("#page-content"), data.teams);
+            generateTimContent(document.querySelector("#page-content"), data.teams);
             document.querySelector("#page-preloader").style.display = "none";
         })
         .catch(error => console.log(error));
 }
 
-const setTeamPage = (signal) => {
+const setTimPage = (signal) => {
     let parent = document.querySelector("#pageContent");
     parent.innerHTML = "";
 
@@ -71,7 +71,7 @@ const setTeamPage = (signal) => {
             return getFootballData(signal, `competitions/${data[0].id}/teams`);
         })
         .then(data => {
-            generateTeamContent(document.querySelector("#page-content"), data.teams);
+            generateTimContent(document.querySelector("#page-content"), data.teams);
             document.querySelector("#page-preloader").style.display = "none";
         })
         .catch(error => {
@@ -85,4 +85,4 @@ const setTeamPage = (signal) => {
         });
 }
 
-export default setTeamPage;
+export default setTimPage;

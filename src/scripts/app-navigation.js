@@ -1,7 +1,7 @@
 import {setButtonActive, setTitleForActivePage} from "./app-state.js";
 import setPertandinganPage from "./page-pertandingan.js";
 import setKlasemenPage from "./page-klasemen.js";
-import setTeamPage from "./page-team.js";
+import setTimPage from "./page-tim.js";
 
 let currentController = new AbortController();
 let currentSignal = currentController.signal;
@@ -52,10 +52,10 @@ const navigationApp = () => {
                 setButtonActive("menu-klasemen");
                 break;
 
-            case "team":
-                setTeamPage(currentSignal);
-                setTitleForActivePage("Team");
-                setButtonActive("menu-team");
+            case "tim":
+                setTimPage(currentSignal);
+                setTitleForActivePage("Tim");
+                setButtonActive("menu-tim");
                 break;
             
             case "keluar":
