@@ -3,27 +3,42 @@ import generateInitialPage from "./gen-initial-page.js";
 import generateSelectCompetition from "./gen-select-competitions.js";
 import fetchErrorHandler from "./app-error-handler.js";
 
-const controller = new AbortController();
-const signal = controller.signal;
-
 const generateMatchContent = (parent, jsonData) => {
     let htmlHelper = "";
     jsonData.forEach(element => {
         htmlHelper += `
             <div class="col s12 m6">
-                <div class="match-card card">
-                    <table class="striped centered grey-text text-darken-2">
-                        <thead>
-                            <th>${element.homeTeam.name}</th>
-                            <th>vs</th>
-                            <th>${element.awayTeam.name}</th>
-                        </thead>
-                        <tbody>
-                            <td>${element.score.fullTime.homeTeam != null ? element.score.fullTime.homeTeam : "tidak tersedia"}</td>
-                            <td>:</td>
-                            <td>${element.score.fullTime.awayTeam != null ? element.score.fullTime.awayTeam : "tidak tersedia"}</td>
-                        </tbody>
-                    </table>
+                <div class="card card-content padding-10">
+                    <div class="row">
+                        <div class="col center side-percentage">
+                            <div class="cut-text min-height-45">
+                                ${element.homeTeam.name}
+                            </div>
+                        </div>
+                        <div class="col center mid-percentage">
+                            <div class="cut-text">vs</div>
+                        </div>
+                        <div class="col center side-percentage">
+                            <div class="cut-text min-height-45">
+                                ${element.awayTeam.name}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col center side-percentage">
+                            <div>
+                                ${element.score.fullTime.homeTeam != null ? element.score.fullTime.homeTeam : "~"}
+                            </div>
+                        </div>
+                        <div class="col center mid-percentage">
+                            <div>:</div>
+                        </div>
+                        <div class="col center side-percentage">
+                            <div>
+                                ${element.score.fullTime.awayTeam != null ? element.score.fullTime.awayTeam : "~"}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;

@@ -9,8 +9,21 @@
   object-fit: contain;
 }
 
-.card-content {
+.row {
+  padding: 0;
+  margin: 0;
+}
+
+.padding-10 {
+  padding: 10px;
+}
+
+.min-height-175 {
   min-height: 175px;
+}
+
+.min-height-45 {
+  min-height: 45px;
 }
 
 .cut-text {
@@ -19,21 +32,6 @@
   display: -webkit-box;
   -webkit-line-clamp: 2; /* number of lines to show */
   -webkit-box-orient: vertical;
-}
-
-.dropdown-content {
-  background-color: #ffffff;
-  margin: 0;
-  display: none;
-  min-width: 250px;
-  max-height: auto;
-  margin-left: -1px;
-  overflow: hidden;
-  opacity: 0;
-  position: absolute;
-  white-space: nowrap;
-  z-index: 1000;
-  will-change: width, height;
 }
 
 #pageContent {
@@ -47,7 +45,16 @@
 }
 
 .dropdown-content {
+  min-width: 250px !important;
   max-height: 350px !important;
   overflow-y: auto !important;
-  backface-visibility: hidden !important;
+  backface-visibility: hidden !important;  
+}
+
+.side-percentage {
+  width: 41%;
+}
+
+.mid-percentage {
+  width: 18%;
 }

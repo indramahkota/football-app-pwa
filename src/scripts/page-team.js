@@ -23,7 +23,7 @@ const generateTeamContent = (parent, jsonData) => {
                         </a>
                     </div>
                     <div class="divider"></div>
-                    <div class="card-content">
+                    <div class="card-content min-height-175">
                         <span class="card-title truncate">${element.name}</span>
                         <p class="cut-text">Area: ${element.area.name}</p>
                         <p class="cut-text">Address: ${element.address}</p>
