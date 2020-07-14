@@ -6,6 +6,7 @@ const setButtonActive = id => {
         }
     });
 
+    /* remove all active and return */
     if(id === null || id === "") return;
 
     /* set active only for given id */
