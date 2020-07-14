@@ -2,7 +2,7 @@ import {setButtonActive, setTitleForActivePage} from "./app-state.js";
 import setPertandinganPage from "./page-pertandingan.js";
 import setKlasemenPage from "./page-klasemen.js";
 import setTimPage from "./page-tim.js";
-import setTimFavoritePage from "./page-timfavorite.js";
+import setTimFavoritPage from "./page-timfavorit.js";
 
 let currentController = new AbortController();
 let currentSignal = currentController.signal;
@@ -59,8 +59,8 @@ const navigationApp = () => {
                 setButtonActive("menu-tim");
                 break;
 
-            case "timfavorite":
-                setTimFavoritePage(currentSignal);
+            case "timfavorit":
+                setTimFavoritPage(currentSignal);
                 setTitleForActivePage("Tim Favorite");
                 setButtonActive("");
 

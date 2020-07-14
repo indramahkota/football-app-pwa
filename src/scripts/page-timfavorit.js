@@ -1,6 +1,6 @@
-const setTimFavoritePage = (signal) => {
+const setTimFavoritPage = (signal) => {
     let parent = document.querySelector("#pageContent");
     parent.innerHTML = "";
 }
 
-export default setTimFavoritePage;
+export default setTimFavoritPage;

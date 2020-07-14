@@ -1,5 +1,15 @@
 import footballAppConstant from "./app-constants.js";
 
+const getFootballDataInCaches = (endPoint) => {
+    const proxyurl = footballAppConstant.proxyUrl;
+    const url = `${footballAppConstant.baseUrl}${endPoint}`;
+
+    if("caches" in window) {
+        return caches.match(proxyurl + url).then(response => response.json());
+    }
+    return Promise.reject("No item");
+}
+
 const getFootballData = (signal, endPoint) => {
     /* registered clients are allowed for 10 requests/minute (free plan). */
     /* if requset exceed response will be 429 (Too Many Requests) */
@@ -30,4 +40,4 @@ const getFootballData = (signal, endPoint) => {
     })
 }
 
-export default getFootballData;
+export {getFootballDataInCaches, getFootballData};

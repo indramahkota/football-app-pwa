@@ -54,25 +54,14 @@ self.addEventListener("activate", e => {
 });
 
 self.addEventListener("fetch", e => {
-  /* if (e.request.method !== "GET") return;
-  e.respondWith(
-    caches.match(e.request, { cacheName: CACHE_NAME })
-          .then(response => response || fetch(e.request))
-  ); */
-
-  if (e.request.method !== "GET") return;
-
-  const url = footballAppConstant.proxyUrl+footballAppConstant.baseUrl;
-
-  if (e.request.url.indexOf(url) > -1) {
-    console.log("fetch football data");
+  if (e.request.url.indexOf(footballAppConstant.baseUrl) > -1) {
     e.respondWith(
-      caches.open(CACHE_NAME).then(cache => {
-        fetch(e.request).then(response => {
-              cache.put(e.request.url, response.clone());
-              return response;
-          });
-      })
+      caches.open(CACHE_NAME).then(cache => 
+          fetch(e.request).then(response => {
+            cache.put(e.request.url, response.clone());
+            return response;
+          })
+      )
     );
   } else {
     e.respondWith(

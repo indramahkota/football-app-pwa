@@ -1,4 +1,4 @@
-import getFootballData from "./app-datasource.js";
+import {getFootballDataInCaches, getFootballData} from "./app-datasource.js";
 import generateInitialPage from "./gen-initial-page.js";
 import generateSelectCompetition from "./gen-select-competitions.js";
 import fetchErrorHandler from "./app-error-handler.js";
@@ -62,6 +62,19 @@ const setTimPage = (signal) => {
 
     generateInitialPage(parent);
     document.querySelector("#page-preloader").style.display = "block";
+
+    getFootballDataInCaches("competitions")
+        .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
+        .then(data => {
+            generateSelectCompetition(document.querySelector("#select-content"), data);
+            activateSelectFunctionality();
+            return getFootballDataInCaches(`competitions/${data[0].id}/teams`);
+        })
+        .then(data => {
+            generateTimContent(document.querySelector("#page-content"), data.teams);
+            document.querySelector("#page-preloader").style.display = "none";
+        })
+        .catch(error => console.log(error))
 
     getFootballData(signal, "competitions")
         .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
