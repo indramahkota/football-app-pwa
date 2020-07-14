@@ -43,29 +43,56 @@ const generateClassementContent = (parent, jsonData) => {
     parent.innerHTML = htmlHelper;
 }
 
-const activateSelectFunctionality = (signal) => {
+const activateSelectFunctionality = () => {
     const select = document.querySelectorAll("select");
     M.FormSelect.init(select);
 
     const instance = document.querySelector("#select-competition");
-
-    /* avoid fast click, instance will be null */
     if(instance === null) return;
 
     instance.addEventListener("change", event => {
-        changeClassementContent(signal, event.target.value);
+        changeKlasemenContent(event.target.value);
     });
 }
 
-const changeClassementContent = (signal, id) => {
+let classementFetchController = new AbortController();
+
+const changeKlasemenContent = (id) => {
     document.querySelector("#page-content").innerHTML = "";
     document.querySelector("#page-preloader").style.display = "block";
-    getFootballData(signal, `competitions/${id}/standings`)
-        .then(data =>{
-            generateClassementContent(document.querySelector("#page-content"), data.standings[0]);
-            document.querySelector("#page-preloader").style.display = "none";
-        })
+
+    getFootballDataInCaches(`competitions/${id}/standings`)
+        .then(generateClassementData)
         .catch(error => console.log(error));
+
+    classementFetchController.abort();
+    const newController = new AbortController();
+    classementFetchController = newController;
+
+    getFootballData(classementFetchController.signal, `competitions/${id}/standings`)
+        .then(generateClassementData)
+        .catch(error => {
+            if(error.name === 'AbortError') {
+                console.log("Aborted! in Change Content");
+            } else {
+                console.log(error);
+            }
+        });
+}
+
+const generateCompetitionData = (data, signal, isFetch) => {
+    generateSelectCompetition(document.querySelector("#select-content"), data);
+    activateSelectFunctionality(signal);
+
+    if(isFetch) {
+        return getFootballData(signal, `competitions/${data[0].id}/standings`);
+    }
+    return getFootballDataInCaches(`competitions/${data[0].id}/standings`);
+}
+
+const generateClassementData = (data) => {
+    generateClassementContent(document.querySelector("#page-content"), data.standings[0]);
+    document.querySelector("#page-preloader").style.display = "none";
 }
 
 const setKlasemenPage = (signal) => {
@@ -77,31 +104,17 @@ const setKlasemenPage = (signal) => {
 
     getFootballDataInCaches("competitions")
         .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
-        .then(data => {
-            generateSelectCompetition(document.querySelector("#select-content"), data);
-            activateSelectFunctionality();
-            return getFootballDataInCaches(`competitions/${data[0].id}/standings`);
-        })
-        .then(data => {
-            generateClassementContent(document.querySelector("#page-content"), data.standings[0]);
-            document.querySelector("#page-preloader").style.display = "none";
-        })
+        .then(data => generateCompetitionData(data, signal, false))
+        .then(generateClassementData)
         .catch(error => console.log(error))
 
     getFootballData(signal, "competitions")
         .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
-        .then(data => {
-            generateSelectCompetition(document.querySelector("#select-content"), data);
-            activateSelectFunctionality(signal);
-            return getFootballData(signal, `competitions/${data[0].id}/standings`);
-        })
-        .then(data => {
-            generateClassementContent(document.querySelector("#page-content"), data.standings[0]);
-            document.querySelector("#page-preloader").style.display = "none";
-        })
+        .then(data => generateCompetitionData(data, signal, true))
+        .then(generateClassementData)
         .catch(error => {
             if(error.name === 'AbortError') {
-                console.log("Aborted!");
+                console.log("Aborted! in Load Page");
             } else {
                 fetchErrorHandler();
                 document.querySelector("#page-preloader").style.display = "none";

@@ -46,25 +46,56 @@ const generateMatchContent = (parent, jsonData) => {
     parent.innerHTML = htmlHelper;
 }
 
-const activateSelectFunctionality = (signal) => {
+const activateSelectFunctionality = () => {
     const select = document.querySelectorAll("select");
     M.FormSelect.init(select);
 
     const instance = document.querySelector("#select-competition");
+    if(instance === null) return;
+
     instance.addEventListener("change", event => {
-        changeMatchContent(signal, event.target.value);
+        changePertandinganContent(event.target.value);
     });
 }
 
-const changeMatchContent = (signal, id)=> {
+let matchFetchController = new AbortController();
+
+const changePertandinganContent = (id)=> {
     document.querySelector("#page-content").innerHTML = "";
     document.querySelector("#page-preloader").style.display = "block";
-    getFootballData(signal, `competitions/${id}/matches`)
-        .then(data =>{
-            generateMatchContent(document.querySelector("#page-content"), data.matches);
-            document.querySelector("#page-preloader").style.display = "none";
-        })
+
+    getFootballDataInCaches(`competitions/${id}/matches`)
+        .then(generateMatchData)
         .catch(error => console.log(error));
+
+    matchFetchController.abort();
+    const newController = new AbortController();
+    matchFetchController = newController;
+
+    getFootballData(matchFetchController.signal, `competitions/${id}/matches`)
+        .then(generateMatchData)
+        .catch(error => {
+            if(error.name === 'AbortError') {
+                console.log("Aborted! in Change Content");
+            } else {
+                console.log(error);
+            }
+        });
+}
+
+const generateCompetitionData = (data, signal, isFetch) => {
+    generateSelectCompetition(document.querySelector("#select-content"), data);
+    activateSelectFunctionality(signal);
+
+    if(isFetch) {
+        return getFootballData(signal, `competitions/${data[0].id}/matches`);
+    }
+    return getFootballDataInCaches(`competitions/${data[0].id}/matches`);
+}
+
+const generateMatchData = (data) => {
+    generateMatchContent(document.querySelector("#page-content"), data.matches);
+    document.querySelector("#page-preloader").style.display = "none";
 }
 
 const setPertandinganPage = (signal) => {
@@ -76,31 +107,17 @@ const setPertandinganPage = (signal) => {
 
     getFootballDataInCaches("competitions")
         .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
-        .then(data => {
-            generateSelectCompetition(document.querySelector("#select-content"), data);
-            activateSelectFunctionality();
-            return getFootballDataInCaches(`competitions/${data[0].id}/matches`);
-        })
-        .then(data => {
-            generateMatchContent(document.querySelector("#page-content"), data.matches);
-            document.querySelector("#page-preloader").style.display = "none";
-        })
+        .then(data => generateCompetitionData(data, signal, false))
+        .then(generateMatchData)
         .catch(error => console.log(error))
     
     getFootballData(signal, "competitions")
         .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
-        .then(data => {
-            generateSelectCompetition(document.querySelector("#select-content"), data);
-            activateSelectFunctionality(signal);
-            return getFootballData(signal, `competitions/${data[0].id}/matches`);
-        })
-        .then(data => {
-            generateMatchContent(document.querySelector("#page-content"), data.matches);
-            document.querySelector("#page-preloader").style.display = "none";
-        })
+        .then(jsonData => generateCompetitionData(jsonData, signal, true))
+        .then(generateMatchData)
         .catch(error => {
             if(error.name === 'AbortError') {
-                console.log("Aborted!");
+                console.log("Aborted! in Load Page");
             } else {
                 fetchErrorHandler();
                 document.querySelector("#page-preloader").style.display = "none";

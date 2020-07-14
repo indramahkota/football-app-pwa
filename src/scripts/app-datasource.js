@@ -5,9 +5,21 @@ const getFootballDataInCaches = (endPoint) => {
     const url = `${footballAppConstant.baseUrl}${endPoint}`;
 
     if("caches" in window) {
-        return caches.match(proxyurl + url).then(response => response.json());
+        return caches.match(proxyurl + url)
+            .then(response => {
+                if(response !== undefined){
+                    return response.json();
+                }
+                return Promise.reject("No cache.");
+            })
+            .then(jsonData => {
+                if(!jsonData.errorCode || jsonData.errorCode === null) {
+                    return jsonData;
+                }
+                return Promise.reject(`Code: ${jsonData.errorCode}, ${jsonData.message}`);
+            })
     }
-    return Promise.reject("No item");
+    return Promise.reject("No cache.");
 }
 
 const getFootballData = (signal, endPoint) => {
@@ -25,7 +37,7 @@ const getFootballData = (signal, endPoint) => {
         signal: signal
     })
     .then(response => {
-        if(response.status !== 200) {
+        if(response === undefined || response.status !== 200) {
             return Promise.reject(new Error(response.statusText));
         }
         return response;

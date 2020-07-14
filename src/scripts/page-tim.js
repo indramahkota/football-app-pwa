@@ -35,25 +35,56 @@ const generateTimContent = (parent, jsonData) => {
     parent.innerHTML = htmlHelper;
 }
 
-const activateSelectFunctionality = (signal) => {
+const activateSelectFunctionality = () => {
     const select = document.querySelectorAll("select");
     M.FormSelect.init(select);
 
     const instance = document.querySelector("#select-competition");
+    if(instance === null) return;
+    
     instance.addEventListener("change", event => {
-        changeTimContent(signal, event.target.value);
+        changeTimContent(event.target.value);
     });
 }
 
-const changeTimContent = (signal, id) => {
+let teamFetchController = new AbortController();
+
+const changeTimContent = (id) => {
     document.querySelector("#page-content").innerHTML = "";
     document.querySelector("#page-preloader").style.display = "block";
-    getFootballData(signal, `competitions/${id}/teams`)
-        .then(data =>{
-            generateTimContent(document.querySelector("#page-content"), data.teams);
-            document.querySelector("#page-preloader").style.display = "none";
-        })
+
+    getFootballDataInCaches(`competitions/${id}/teams`)
+        .then(generateTeamData)
         .catch(error => console.log(error));
+
+    teamFetchController.abort();
+    const newController = new AbortController();
+    teamFetchController = newController;
+    
+    getFootballData(teamFetchController.signal, `competitions/${id}/teams`)
+        .then(generateTeamData)
+        .catch(error => {
+            if(error.name === 'AbortError') {
+                console.log("Aborted! in Change Content");
+            } else {
+                console.log(error);
+            }
+        });
+}
+
+const generateCompetitionData = (data, signal, isFetch) => {
+    generateSelectCompetition(document.querySelector("#select-content"), data);
+    activateSelectFunctionality(signal);
+
+    if(isFetch) {
+        return getFootballData(signal, `competitions/${data[0].id}/teams`);
+    }
+    return getFootballDataInCaches(`competitions/${data[0].id}/teams`);
+}
+
+const generateTeamData = (data) => {
+    generateTimContent(document.querySelector("#page-content"), data.teams);
+    document.querySelector("#page-preloader").style.display = "none";
 }
 
 const setTimPage = (signal) => {
@@ -65,28 +96,14 @@ const setTimPage = (signal) => {
 
     getFootballDataInCaches("competitions")
         .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
-        .then(data => {
-            generateSelectCompetition(document.querySelector("#select-content"), data);
-            activateSelectFunctionality();
-            return getFootballDataInCaches(`competitions/${data[0].id}/teams`);
-        })
-        .then(data => {
-            generateTimContent(document.querySelector("#page-content"), data.teams);
-            document.querySelector("#page-preloader").style.display = "none";
-        })
+        .then(data => generateCompetitionData(data, signal, false))
+        .then(generateTeamData)
         .catch(error => console.log(error))
 
     getFootballData(signal, "competitions")
         .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
-        .then(data => {
-            generateSelectCompetition(document.querySelector("#select-content"), data);
-            activateSelectFunctionality();
-            return getFootballData(signal, `competitions/${data[0].id}/teams`);
-        })
-        .then(data => {
-            generateTimContent(document.querySelector("#page-content"), data.teams);
-            document.querySelector("#page-preloader").style.display = "none";
-        })
+        .then(data => generateCompetitionData(data, signal, true))
+        .then(generateTeamData)
         .catch(error => {
             if(error.name === 'AbortError') {
                 console.log("Aborted!");
