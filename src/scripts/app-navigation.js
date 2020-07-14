@@ -1,4 +1,4 @@
-import {setButtonActive, setTitleForActivePage} from "./app-state.js";
+import { setButtonActive, setTitleForActivePage } from "./app-state.js";
 import setPertandinganPage from "./page-pertandingan.js";
 import setKlasemenPage from "./page-klasemen.js";
 import setTimPage from "./page-tim.js";
@@ -36,7 +36,7 @@ const navigationApp = () => {
 
     const initPage = () => {
         let page = location.hash.substr(1);
-        if (page === "") page = "pertandingan";
+        if(page === "") page = "pertandingan";
 
         setCurrentControllerSignal();
 

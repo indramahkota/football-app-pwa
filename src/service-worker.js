@@ -44,7 +44,7 @@ self.addEventListener("activate", e => {
     caches.keys().then(cacheNames => 
       Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
+          if(cacheName !== CACHE_NAME) {
             return caches.delete(cacheName);
           }
         })
@@ -54,7 +54,7 @@ self.addEventListener("activate", e => {
 });
 
 self.addEventListener("fetch", e => {
-  if (e.request.url.indexOf(footballAppConstant.baseUrl) > -1) {
+  if(e.request.url.indexOf(footballAppConstant.baseUrl) > -1) {
     e.respondWith(
       caches.open(CACHE_NAME).then(cache => 
           fetch(e.request).then(response => {

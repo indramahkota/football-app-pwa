@@ -11,10 +11,9 @@ const getFootballDataInCaches = (endPoint) => {
 }
 
 const getFootballData = (signal, endPoint) => {
-    /* registered clients are allowed for 10 requests/minute (free plan). */
+    /* possible error: registered clients are allowed for 10 requests/minute (free plan). */
     /* if requset exceed response will be 429 (Too Many Requests) */
     /* avoid "No Access-Control-Allow-Origin header" */
-    /* possible error: (Too Many Requests) */
     /* ref: https://stackoverflow.com/questions/43871637/no-access-control-allow-origin-header-is-present-on-the-requested-resource-whe */
     const proxyurl = footballAppConstant.proxyUrl;
     const url = `${footballAppConstant.baseUrl}${endPoint}`;
@@ -40,4 +39,4 @@ const getFootballData = (signal, endPoint) => {
     })
 }
 
-export {getFootballDataInCaches, getFootballData};
+export { getFootballDataInCaches, getFootballData };

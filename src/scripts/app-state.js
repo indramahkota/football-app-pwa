@@ -19,4 +19,4 @@ const setTitleForActivePage = page => {
     document.title = `Football App | ${page}`;
 }
 
-export {setButtonActive, setTitleForActivePage};
+export { setButtonActive, setTitleForActivePage };

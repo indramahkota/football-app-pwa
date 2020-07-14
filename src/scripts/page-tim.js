@@ -1,4 +1,4 @@
-import {getFootballDataInCaches, getFootballData} from "./app-datasource.js";
+import { getFootballDataInCaches, getFootballData } from "./app-datasource.js";
 import generateInitialPage from "./gen-initial-page.js";
 import generateSelectCompetition from "./gen-select-competitions.js";
 import fetchErrorHandler from "./app-error-handler.js";
@@ -88,7 +88,7 @@ const setTimPage = (signal) => {
             document.querySelector("#page-preloader").style.display = "none";
         })
         .catch(error => {
-            if (error.name === 'AbortError') {
+            if(error.name === 'AbortError') {
                 console.log("Aborted!");
             } else {
                 fetchErrorHandler();
