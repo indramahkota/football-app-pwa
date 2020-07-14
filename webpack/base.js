@@ -126,7 +126,7 @@ module.exports = {
           density: "4.0"
         }
       ],
-      start_url: "/index.html",
+      start_url: "./",
       display: "standalone",
       background_color: "#3E4EB8",
       theme_color: "#2F3BA2",
