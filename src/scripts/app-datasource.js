@@ -16,7 +16,7 @@ const getFootballData = (signal, endPoint) => {
         signal: signal
     })
     .then(response => {
-        if(response.status != 200) {
+        if(response.status !== 200) {
             return Promise.reject(new Error(response.statusText));
         }
         return response;
