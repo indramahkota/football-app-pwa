@@ -21,24 +21,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const modal = document.querySelectorAll(".modal");
-  M.Modal.init(modal, {
-    onCloseEnd: () => {
-      if(location.hash.substr(1) === "keluar") {
-        location = "/"
-      } else {
-        location.reload();
-      }
-    }
-  });
+  M.Modal.init(modal);
 
   navigationApp();
 });
 
-/* Sementara dinonaktifkan */
-/* if ("serviceWorker" in navigator) {
+if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("./worker.js")
+    navigator.serviceWorker.register("./worker.js")
       .then(() => {
         console.log("Pendaftaran ServiceWorker berhasil");
       })
@@ -48,4 +38,4 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 } else {
   console.log("ServiceWorker belum didukung browser ini.");
-} */
+}
