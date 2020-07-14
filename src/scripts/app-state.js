@@ -6,6 +6,8 @@ const setButtonActive = id => {
         }
     });
 
+    if(id === null || id === "") return;
+
     /* set active only for given id */
     document.querySelectorAll(`#${id}`).forEach(element => {
         element.className += " active";

@@ -1,7 +1,7 @@
 import footballAppConstant from "./app-constants.js";
 
 const getFootballData = (signal, endPoint) => {
-    /* registered clients are allowed for 10 requests/minute in the free plan. */
+    /* registered clients are allowed for 10 requests/minute (free plan). */
     /* if requset exceed response will be 429 (Too Many Requests) */
     /* avoid "No Access-Control-Allow-Origin header" */
     /* possible error: (Too Many Requests) */

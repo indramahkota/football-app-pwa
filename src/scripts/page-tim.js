@@ -15,7 +15,7 @@ const generateTimContent = (parent, jsonData) => {
                     <div class="card-image">
                         <img alt="Team Image" src="${element.crestUrl !== null
                             && element.crestUrl !== ""
-                            ? element.crestUrl : nullImage}"
+                            ? element.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage}"
                             onerror="this.onerror=null;this.src='${nullImage}';"
                             >
                         <a class="btn-floating halfway-fab waves-effect waves-light cyan lighten-2">
