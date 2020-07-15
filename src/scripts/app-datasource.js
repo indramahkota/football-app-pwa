@@ -1,6 +1,6 @@
 import footballAppConstant from "./app-constants.js";
 
-const getFootballDataInCaches = (endPoint) => {
+const getFootballDataInCaches = endPoint => {
     const proxyurl = footballAppConstant.proxyUrl;
     const url = `${footballAppConstant.baseUrl}${endPoint}`;
 
