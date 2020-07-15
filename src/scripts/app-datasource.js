@@ -1,5 +1,12 @@
 import footballAppConstant from "./app-constants.js";
 
+const checkErrorInJsonResponse = jsonData => {
+    if(!jsonData.errorCode || jsonData.errorCode === null) {
+        return jsonData;
+    }
+    return Promise.reject(`Code: ${jsonData.errorCode}, ${jsonData.message}`);
+}
+
 const getFootballDataInCaches = endPoint => {
     const proxyurl = footballAppConstant.proxyUrl;
     const url = `${footballAppConstant.baseUrl}${endPoint}`;
@@ -12,12 +19,7 @@ const getFootballDataInCaches = endPoint => {
                 }
                 return Promise.reject("No cache.");
             })
-            .then(jsonData => {
-                if(!jsonData.errorCode || jsonData.errorCode === null) {
-                    return jsonData;
-                }
-                return Promise.reject(`Code: ${jsonData.errorCode}, ${jsonData.message}`);
-            })
+            .then(checkErrorInJsonResponse)
     }
     return Promise.reject("No cache.");
 }
@@ -40,15 +42,9 @@ const getFootballData = (signal, endPoint) => {
         if(response === undefined || response.status !== 200) {
             return Promise.reject(new Error(response.statusText));
         }
-        return response;
+        return response.json();
     })
-    .then(response => response.json())
-    .then(jsonData => {
-        if(!jsonData.errorCode || jsonData.errorCode === null) {
-            return jsonData;
-        }
-        return Promise.reject(`Code: ${jsonData.errorCode}, ${jsonData.message}`);
-    })
+    .then(checkErrorInJsonResponse)
 }
 
 export { getFootballDataInCaches, getFootballData };
