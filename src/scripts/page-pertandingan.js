@@ -2,10 +2,22 @@ import { getFootballDataInCaches, getFootballData } from "./app-datasource.js";
 import generateInitialPage from "./gen-initial-page.js";
 import generateSelectCompetition from "./gen-select-competitions.js";
 import fetchErrorHandler from "./app-error-handler.js";
-import { getFormattedDate } from "./app-utilities";
+import { compareValues, getFormattedDate } from "./app-utilities";
 
 const generateMatchContent = (parent, jsonData) => {
     let htmlHelper = "";
+    
+    if(jsonData.length === 0) {
+        parent.innerHTML = `
+            <div class="col s12">
+                <div class="card card-content padding-10">
+                    <div class="card-title" style="padding: 0px 8px 12px;">Mohon maaf, data yang Anda minta tidak tersedia.</div>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
     jsonData.forEach(element => {
         const badgeColor = () => element.status === "FINISHED" ? "" : "red";
         const badgeText = () => element.status === "FINISHED" ? "Selesai" : "Belum Selesai";
@@ -73,18 +85,18 @@ const generateCompetitionData = (data, signal, isFetch) => {
 
     if(matchCompetitionId !== -9999) {
         if(isFetch) {
-            return getFootballData(signal, `competitions/${matchCompetitionId}/matches`);
+            return getFootballData(signal, `competitions/${matchCompetitionId}/matches?status=SCHEDULED`);
         }
-        return getFootballDataInCaches(`competitions/${matchCompetitionId}/matches`);
+        return getFootballDataInCaches(`competitions/${matchCompetitionId}/matches?status=SCHEDULED`);
     } else {
         if(isFetch) {
-            return getFootballData(signal, `competitions/${data[0].id}/matches`);
+            return getFootballData(signal, `competitions/${data[0].id}/matches?status=SCHEDULED`);
         }
-        return getFootballDataInCaches(`competitions/${data[0].id}/matches`);
+        return getFootballDataInCaches(`competitions/${data[0].id}/matches?status=SCHEDULED`);
     }
 }
 
-const generateMatchData = (data) => {
+const generateMatchData = data => {
     generateMatchContent(document.querySelector("#page-content"), data.matches);
     document.querySelector("#page-preloader").style.display = "none";
 }
@@ -101,6 +113,7 @@ const setPertandinganPage = (signal, competitionId) => {
 
     getFootballDataInCaches("competitions")
         .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
+        .then(data => data.sort(compareValues("name")))
         .then(data => generateCompetitionData(data, signal, false))
         .then(generateMatchData)
         .catch(error => console.log(error))
@@ -108,6 +121,7 @@ const setPertandinganPage = (signal, competitionId) => {
     if(navigator.onLine) {
         getFootballData(signal, "competitions")
             .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
+            .then(data => data.sort(compareValues("name")))
             .then(jsonData => generateCompetitionData(jsonData, signal, true))
             .then(generateMatchData)
             .catch(error => {

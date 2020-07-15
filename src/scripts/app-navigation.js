@@ -2,7 +2,7 @@ import { setButtonActive, setTitleForActivePage } from "./app-state.js";
 import setPertandinganPage from "./page-pertandingan.js";
 import setKlasemenPage from "./page-klasemen.js";
 import setTimPage from "./page-tim.js";
-import setTimFavoritPage from "./page-timfavorit.js";
+import setTimFavoritPage from "./page-tim-favorit.js";
 import { getCompetitionId } from "./app-utilities.js";
 
 let currentController = new AbortController();

@@ -2,9 +2,23 @@ import { getFootballDataInCaches, getFootballData } from "./app-datasource.js";
 import generateInitialPage from "./gen-initial-page.js";
 import generateSelectCompetition from "./gen-select-competitions.js";
 import fetchErrorHandler from "./app-error-handler.js";
+import { compareValues } from "./app-utilities";
 
 const generateClassementContent = (parent, jsonData) => {
-    let htmlHelper = `
+    let htmlHelper = "";
+    
+    if(jsonData.table.length === 0) {
+        parent.innerHTML = `
+            <div class="col s12">
+                <div class="card card-content padding-10">
+                    <div class="card-title" style="padding: 0px 8px 12px;">Mohon maaf, data yang Anda minta tidak tersedia.</div>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    htmlHelper += `
         <table>
             <thead>
                 <tr>
@@ -21,6 +35,7 @@ const generateClassementContent = (parent, jsonData) => {
             </thead>
             <tbody>
     `;
+
     jsonData.table.forEach(element => {
         htmlHelper += `
                 <tr>
@@ -36,6 +51,7 @@ const generateClassementContent = (parent, jsonData) => {
                 </tr>
         `;
     });
+
     htmlHelper += `
             </tbody>
         </table>
@@ -73,7 +89,7 @@ const generateCompetitionData = (data, signal, isFetch) => {
     }
 }
 
-const generateClassementData = (data) => {
+const generateClassementData = data => {
     generateClassementContent(document.querySelector("#page-content"), data.standings[0]);
     document.querySelector("#page-preloader").style.display = "none";
 }
@@ -90,6 +106,7 @@ const setKlasemenPage = (signal, competitionId) => {
 
     getFootballDataInCaches("competitions")
         .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
+        .then(data => data.sort(compareValues("name")))
         .then(data => generateCompetitionData(data, signal, false))
         .then(generateClassementData)
         .catch(error => console.log(error))
@@ -97,6 +114,7 @@ const setKlasemenPage = (signal, competitionId) => {
     if(navigator.onLine) {
         getFootballData(signal, "competitions")
             .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
+            .then(data => data.sort(compareValues("name")))
             .then(data => generateCompetitionData(data, signal, true))
             .then(generateClassementData)
             .catch(error => {

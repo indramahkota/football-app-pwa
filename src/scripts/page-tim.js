@@ -2,11 +2,24 @@ import { getFootballDataInCaches, getFootballData } from "./app-datasource.js";
 import generateInitialPage from "./gen-initial-page.js";
 import generateSelectCompetition from "./gen-select-competitions.js";
 import fetchErrorHandler from "./app-error-handler.js";
+import { compareValues } from "./app-utilities";
 
 import nullImage from "../assets/images/null-image.jpg";
 
 const generateTimContent = (parent, jsonData) => {
     let htmlHelper = "";
+
+    if(jsonData.length === 0) {
+        parent.innerHTML = `
+            <div class="col s12">
+                <div class="card card-content padding-10">
+                    <div class="card-title" style="padding: 0px 8px 12px;">Mohon maaf, data yang Anda minta tidak tersedia.</div>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
     jsonData.forEach(element => {
         /* Team Image dapat merespon 404 */
         htmlHelper += `
@@ -67,8 +80,8 @@ const generateCompetitionData = (data, signal, isFetch) => {
     }
 }
 
-const generateTeamData = (data) => {
-    generateTimContent(document.querySelector("#page-content"), data.teams);
+const generateTeamData = data => {
+    generateTimContent(document.querySelector("#page-content"), data);
     document.querySelector("#page-preloader").style.display = "none";
 }
 
@@ -84,14 +97,18 @@ const setTimPage = (signal, competitionId) => {
 
     getFootballDataInCaches("competitions")
         .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
+        .then(data => data.sort(compareValues("name")))
         .then(data => generateCompetitionData(data, signal, false))
+        .then(data => data.teams.sort(compareValues("name")))
         .then(generateTeamData)
         .catch(error => console.log(error))
 
     if(navigator.onLine) {
         getFootballData(signal, "competitions")
             .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
+            .then(data => data.sort(compareValues("name")))
             .then(data => generateCompetitionData(data, signal, true))
+            .then(data => data.teams.sort(compareValues("name")))
             .then(generateTeamData)
             .catch(error => {
                 if(error.name === 'AbortError') {
