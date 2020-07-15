@@ -108,6 +108,7 @@ const generateCompetitionData = (data, signal, isFetch) => {
 }
 
 const generateMatchData = (data) => {
+    location = `#pertandingan?competitionId=${data.competition.id}`;
     generateMatchContent(document.querySelector("#page-content"), data.matches);
     document.querySelector("#page-preloader").style.display = "none";
 }

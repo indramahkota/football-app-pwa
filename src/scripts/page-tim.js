@@ -91,6 +91,7 @@ const generateCompetitionData = (data, signal, isFetch) => {
 }
 
 const generateTeamData = (data) => {
+    location = `#tim?competitionId=${data.competition.id}`;
     generateTimContent(document.querySelector("#page-content"), data.teams);
     document.querySelector("#page-preloader").style.display = "none";
 }

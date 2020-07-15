@@ -97,6 +97,7 @@ const generateCompetitionData = (data, signal, isFetch) => {
 }
 
 const generateClassementData = (data) => {
+    location = `#klasemen?competitionId=${data.competition.id}`;
     generateClassementContent(document.querySelector("#page-content"), data.standings[0]);
     document.querySelector("#page-preloader").style.display = "none";
 }
