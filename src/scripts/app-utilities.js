@@ -1,9 +1,23 @@
-const getCompetitionId = (urlParameter) => {
+const getCompetitionId = urlParameter => {
     let urlSearchParams = new URLSearchParams(urlParameter);
     return Number(urlSearchParams.get("competitionId"));
 }
 
-const getFormattedDate = (utcDate) => {
+const getTeamId = urlParameter => {
+    let urlSearchParams = new URLSearchParams(urlParameter);
+    return Number(urlSearchParams.get("teamId"));
+}
+
+/* referensi: https://www.sitepoint.com/sort-an-array-of-objects-in-javascript/ */
+const compareValues = (key, order = 'asc') => {
+    return (a, b) => {
+      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) return 0;
+      const comparison = a[key].localeCompare(b[key]);
+      return ((order === 'desc') ? (comparison * -1) : comparison);
+    };
+}
+
+const getFormattedDate = utcDate => {
     let weekday = new Array(7);
     weekday[0] = "Minggu";
     weekday[1] = "Senin";
@@ -36,4 +50,4 @@ const getFormattedDate = (utcDate) => {
     return `${day}, ${date} ${month} ${year}`;
 }
 
-export { getCompetitionId, getFormattedDate };
+export { getCompetitionId, getTeamId, compareValues, getFormattedDate };
