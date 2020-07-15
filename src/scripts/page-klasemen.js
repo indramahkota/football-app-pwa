@@ -69,15 +69,21 @@ const changeKlasemenContent = (id) => {
     const newController = new AbortController();
     classementFetchController = newController;
 
-    getFootballData(classementFetchController.signal, `competitions/${id}/standings`)
-        .then(generateClassementData)
-        .catch(error => {
-            if(error.name === 'AbortError') {
-                console.log("Aborted! in Change Content");
-            } else {
-                console.log(error);
-            }
-        });
+    if(navigator.onLine) {
+        getFootballData(classementFetchController.signal, `competitions/${id}/standings`)
+            .then(generateClassementData)
+            .catch(error => {
+                if(error.name === 'AbortError') {
+                    console.log("Aborted! in Change Content");
+                } else {
+                    fetchErrorHandler("Anda saat ini sedang offline!", "Mohon maaf atas ketidaknyamanannya.");
+                    document.querySelector("#page-preloader").style.display = "none";
+                    console.log(error);
+                }
+            });
+        return;
+    }
+    fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
 }
 
 const generateCompetitionData = (data, signal, isFetch) => {
@@ -108,19 +114,23 @@ const setKlasemenPage = (signal) => {
         .then(generateClassementData)
         .catch(error => console.log(error))
 
-    getFootballData(signal, "competitions")
-        .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
-        .then(data => generateCompetitionData(data, signal, true))
-        .then(generateClassementData)
-        .catch(error => {
-            if(error.name === 'AbortError') {
-                console.log("Aborted! in Load Page");
-            } else {
-                fetchErrorHandler();
-                document.querySelector("#page-preloader").style.display = "none";
-                console.log(error);
-            }
-        });
+    if(navigator.onLine) {
+        getFootballData(signal, "competitions")
+            .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
+            .then(data => generateCompetitionData(data, signal, true))
+            .then(generateClassementData)
+            .catch(error => {
+                if(error.name === 'AbortError') {
+                    console.log("Aborted! in Load Page");
+                } else {
+                    fetchErrorHandler(error, "Mohon maaf atas ketidaknyamanannya.");
+                    document.querySelector("#page-preloader").style.display = "none";
+                    console.log(error);
+                }
+            });
+        return;
+    }
+    fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
 }
 
 export default setKlasemenPage;

@@ -72,15 +72,21 @@ const changePertandinganContent = (id)=> {
     const newController = new AbortController();
     matchFetchController = newController;
 
-    getFootballData(matchFetchController.signal, `competitions/${id}/matches`)
-        .then(generateMatchData)
-        .catch(error => {
-            if(error.name === 'AbortError') {
-                console.log("Aborted! in Change Content");
-            } else {
-                console.log(error);
-            }
-        });
+    if(navigator.onLine) {
+        getFootballData(matchFetchController.signal, `competitions/${id}/matches`)
+            .then(generateMatchData)
+            .catch(error => {
+                if(error.name === 'AbortError') {
+                    console.log("Aborted! in Change Content");
+                } else {
+                    fetchErrorHandler("Anda saat ini sedang offline!", "Mohon maaf atas ketidaknyamanannya.");
+                    document.querySelector("#page-preloader").style.display = "none";
+                    console.log(error);
+                }
+            });
+        return;
+    }
+    fetchErrorHandler("Anda saat ini sedang offline!", "Mohon maaf atas ketidaknyamanannya.");
 }
 
 const generateCompetitionData = (data, signal, isFetch) => {
@@ -111,19 +117,23 @@ const setPertandinganPage = (signal) => {
         .then(generateMatchData)
         .catch(error => console.log(error))
     
-    getFootballData(signal, "competitions")
-        .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
-        .then(jsonData => generateCompetitionData(jsonData, signal, true))
-        .then(generateMatchData)
-        .catch(error => {
-            if(error.name === 'AbortError') {
-                console.log("Aborted! in Load Page");
-            } else {
-                fetchErrorHandler();
-                document.querySelector("#page-preloader").style.display = "none";
-                console.log(error);
-            }
-        });
+    if(navigator.onLine) {
+        getFootballData(signal, "competitions")
+            .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
+            .then(jsonData => generateCompetitionData(jsonData, signal, true))
+            .then(generateMatchData)
+            .catch(error => {
+                if(error.name === 'AbortError') {
+                    console.log("Aborted! in Load Page");
+                } else {
+                    fetchErrorHandler(error, "Mohon maaf atas ketidaknyamanannya.");
+                    document.querySelector("#page-preloader").style.display = "none";
+                    console.log(error);
+                }
+            });
+        return;
+    }
+    fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
 }
 
 export default setPertandinganPage;

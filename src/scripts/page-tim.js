@@ -16,7 +16,7 @@ const generateTimContent = (parent, jsonData) => {
                         <img alt="Team Image" src="${element.crestUrl !== null
                             && element.crestUrl !== ""
                             ? element.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage}"
-                            onerror="this.onerror=null;this.src='${nullImage}';"
+                            onerror="this.onerror=null;this.src='${nullImage}';console.log('Gambar ini diganti karena 404 not found.');"
                             >
                         <a class="btn-floating halfway-fab waves-effect waves-light cyan lighten-2">
                             <i class="material-icons">favorite_border</i>
@@ -61,15 +61,21 @@ const changeTimContent = (id) => {
     const newController = new AbortController();
     teamFetchController = newController;
     
-    getFootballData(teamFetchController.signal, `competitions/${id}/teams`)
-        .then(generateTeamData)
-        .catch(error => {
-            if(error.name === 'AbortError') {
-                console.log("Aborted! in Change Content");
-            } else {
-                console.log(error);
-            }
-        });
+    if(navigator.onLine) {
+        getFootballData(teamFetchController.signal, `competitions/${id}/teams`)
+            .then(generateTeamData)
+            .catch(error => {
+                if(error.name === 'AbortError') {
+                    console.log("Aborted! in Change Content");
+                } else {
+                    fetchErrorHandler("Anda saat ini sedang offline!", "Mohon maaf atas ketidaknyamanannya.");
+                    document.querySelector("#page-preloader").style.display = "none";
+                    console.log(error);
+                }
+            });
+        return;
+    }
+    fetchErrorHandler("Anda saat ini sedang offline!", "Mohon maaf atas ketidaknyamanannya.");
 }
 
 const generateCompetitionData = (data, signal, isFetch) => {
@@ -100,19 +106,23 @@ const setTimPage = (signal) => {
         .then(generateTeamData)
         .catch(error => console.log(error))
 
-    getFootballData(signal, "competitions")
-        .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
-        .then(data => generateCompetitionData(data, signal, true))
-        .then(generateTeamData)
-        .catch(error => {
-            if(error.name === 'AbortError') {
-                console.log("Aborted!");
-            } else {
-                fetchErrorHandler();
-                document.querySelector("#page-preloader").style.display = "none";
-                console.log(error);
-            }
-        });
+    if(navigator.onLine) {
+        getFootballData(signal, "competitions")
+            .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
+            .then(data => generateCompetitionData(data, signal, true))
+            .then(generateTeamData)
+            .catch(error => {
+                if(error.name === 'AbortError') {
+                    console.log("Aborted!");
+                } else {
+                    fetchErrorHandler(error, "Mohon maaf atas ketidaknyamanannya.");
+                    document.querySelector("#page-preloader").style.display = "none";
+                    console.log(error);
+                }
+            });
+        return;
+    }
+    fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
 }
 
 export default setTimPage;
