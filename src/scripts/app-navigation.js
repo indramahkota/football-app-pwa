@@ -3,6 +3,7 @@ import setPertandinganPage from "./page-pertandingan.js";
 import setKlasemenPage from "./page-klasemen.js";
 import setTimPage from "./page-tim.js";
 import setTimFavoritPage from "./page-timfavorit.js";
+import { getCompetitionId } from "./app-utilities.js";
 
 let currentController = new AbortController();
 let currentSignal = currentController.signal;
@@ -38,31 +39,27 @@ const navigationApp = () => {
         let page = location.hash.substr(1);
         if(page === "") page = "pertandingan";
 
-        let competitionId = 0;
         setCurrentControllerSignal();
 
         if(page.includes("pertandingan?competitionId=")) {
-            competitionId = page.substr(27);
-            //console.log("pertandingan with competitionId: " + competitionId);
-            setPertandinganPage(currentSignal, competitionId);
+            setPertandinganPage(currentSignal,
+                getCompetitionId(page.replace("pertandingan", "")));
             setTitleForActivePage("Pertandingan");
             setButtonActive("menu-pertandingan");
             return;
         }
 
         if(page.includes("klasemen?competitionId=")) {
-            competitionId = page.substr(23);
-            //console.log("klasemen with competitionId: " + competitionId);
-            setKlasemenPage(currentSignal, competitionId);
+            setKlasemenPage(currentSignal,
+                getCompetitionId(page.replace("klasemen", "")));
             setTitleForActivePage("Klasemen");
             setButtonActive("menu-klasemen");
             return;
         }
 
         if(page.includes("tim?competitionId=")) {
-            competitionId = page.substr(18);
-            //console.log("tim with competitionId: " + competitionId);
-            setTimPage(currentSignal, competitionId);
+            setTimPage(currentSignal,
+                getCompetitionId(page.replace("tim", "")));
             setTitleForActivePage("Tim");
             setButtonActive("menu-tim");
             return;

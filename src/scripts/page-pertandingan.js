@@ -2,7 +2,7 @@ import { getFootballDataInCaches, getFootballData } from "./app-datasource.js";
 import generateInitialPage from "./gen-initial-page.js";
 import generateSelectCompetition from "./gen-select-competitions.js";
 import fetchErrorHandler from "./app-error-handler.js";
-import getFormattedDate from "./app-utilities";
+import { getFormattedDate } from "./app-utilities";
 
 const generateMatchContent = (parent, jsonData) => {
     let htmlHelper = "";

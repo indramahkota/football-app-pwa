@@ -1,3 +1,8 @@
+const getCompetitionId = (urlParameter) => {
+    let urlSearchParams = new URLSearchParams(urlParameter);
+    return Number(urlSearchParams.get("competitionId"));
+}
+
 const getFormattedDate = (utcDate) => {
     let weekday = new Array(7);
     weekday[0] = "Minggu";
@@ -31,4 +36,4 @@ const getFormattedDate = (utcDate) => {
     return `${day}, ${date} ${month} ${year}`;
 }
 
-export default getFormattedDate;
+export { getCompetitionId, getFormattedDate };
