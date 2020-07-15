@@ -71,6 +71,9 @@ const navigationApp = () => {
             
             case "keluar":
                 const modal = document.querySelector("#keluar-modal");
+                modal.querySelector("#logout-button").addEventListener("click", () => {
+                    location = "./";
+                });
                 M.Sidenav.getInstance(sidenav).close();
                 M.Modal.getInstance(modal).open();
                 break;
