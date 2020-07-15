@@ -12,22 +12,24 @@ const generateTimContent = (parent, jsonData) => {
         htmlHelper += `
             <div class="col s12 m6">
                 <div class="card">
-                    <div class="card-image">
-                        <img alt="Team Image" src="${element.crestUrl !== null
-                            && element.crestUrl !== ""
-                            ? element.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage}"
-                            onerror="this.onerror=null;this.src='${nullImage}';console.log('Gambar ini diganti karena 404 not found.');"
-                            >
-                        <a class="btn-floating halfway-fab waves-effect waves-light cyan lighten-2">
-                            <i class="material-icons">favorite_border</i>
-                        </a>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="card-content min-height-175">
-                        <span class="card-title truncate">${element.name}</span>
-                        <p class="cut-text">Area: ${element.area.name}</p>
-                        <p class="cut-text">Address: ${element.address}</p>
-                    </div>
+                    <a href="#matchtim?id=${element.id}">
+                        <div class="card-image">
+                            <img class="team-image" alt="Team Image" src="${element.crestUrl !== null
+                                && element.crestUrl !== ""
+                                ? element.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage}"
+                                onerror="this.onerror=null;this.src='${nullImage}';console.log('Gambar ini diganti karena 404 not found.');"
+                                >
+                            <a class="btn-floating halfway-fab waves-effect waves-light cyan lighten-2">
+                                <i class="material-icons">favorite_border</i>
+                            </a>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="card-content min-height-175">
+                            <span class="card-title truncate">${element.name}</span>
+                            <p class="cut-text">Area: ${element.area.name}</p>
+                            <p class="cut-text">Address: ${element.address}</p>
+                        </div>
+                    </a>
                 </div>
             </div>
         `;
