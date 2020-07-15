@@ -51,60 +51,39 @@ const activateSelectFunctionality = () => {
     if(instance === null) return;
 
     instance.addEventListener("change", event => {
-        changeKlasemenContent(event.target.value);
+        location = `#klasemen?competitionId=${event.target.value}`;
     });
 }
 
-let classementFetchController = new AbortController();
-
-const changeKlasemenContent = (id) => {
-    document.querySelector("#page-content").innerHTML = "";
-    document.querySelector("#page-preloader").style.display = "block";
-
-    getFootballDataInCaches(`competitions/${id}/standings`)
-        .then(generateClassementData)
-        .catch(error => console.log(error));
-
-    classementFetchController.abort();
-    const newController = new AbortController();
-    classementFetchController = newController;
-
-    if(navigator.onLine) {
-        getFootballData(classementFetchController.signal, `competitions/${id}/standings`)
-            .then(generateClassementData)
-            .catch(error => {
-                if(error.name === 'AbortError') {
-                    console.log("Aborted! in Change Content");
-                } else {
-                    fetchErrorHandler("Anda saat ini sedang offline!", "Mohon maaf atas ketidaknyamanannya.");
-                    document.querySelector("#page-preloader").style.display = "none";
-                    console.log(error);
-                }
-            });
-        return;
-    }
-    fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
-}
-
+let classementCompetitionId;
 const generateCompetitionData = (data, signal, isFetch) => {
-    generateSelectCompetition(document.querySelector("#select-content"), data);
+    generateSelectCompetition(document.querySelector("#select-content"), data, classementCompetitionId);
     activateSelectFunctionality(signal);
 
-    if(isFetch) {
-        return getFootballData(signal, `competitions/${data[0].id}/standings`);
+    if(classementCompetitionId !== -9999) {
+        if(isFetch) {
+            return getFootballData(signal, `competitions/${classementCompetitionId}/standings`);
+        }
+        return getFootballDataInCaches(`competitions/${classementCompetitionId}/standings`);
+    } else {
+        if(isFetch) {
+            return getFootballData(signal, `competitions/${data[0].id}/standings`);
+        }
+        return getFootballDataInCaches(`competitions/${data[0].id}/standings`);
     }
-    return getFootballDataInCaches(`competitions/${data[0].id}/standings`);
 }
 
 const generateClassementData = (data) => {
-    location = `#klasemen?competitionId=${data.competition.id}`;
     generateClassementContent(document.querySelector("#page-content"), data.standings[0]);
     document.querySelector("#page-preloader").style.display = "none";
 }
 
-const setKlasemenPage = (signal) => {
+/* Mengakibatkan 2x perubahan halaman, 1: saat data offline tersedia, 2: saat data online tersedia */
+const setKlasemenPage = (signal, competitionId) => {
     let parent = document.querySelector("#pageContent");
     parent.innerHTML = "";
+
+    classementCompetitionId = competitionId;
 
     generateInitialPage(parent);
     document.querySelector("#page-preloader").style.display = "block";

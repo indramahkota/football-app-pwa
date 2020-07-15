@@ -38,29 +38,57 @@ const navigationApp = () => {
         let page = location.hash.substr(1);
         if(page === "") page = "pertandingan";
 
+        let competitionId = 0;
         setCurrentControllerSignal();
+
+        if(page.includes("pertandingan?competitionId=")) {
+            competitionId = page.substr(27);
+            //console.log("pertandingan with competitionId: " + competitionId);
+            setPertandinganPage(currentSignal, competitionId);
+            setTitleForActivePage("Pertandingan");
+            setButtonActive("menu-pertandingan");
+            return;
+        }
+
+        if(page.includes("klasemen?competitionId=")) {
+            competitionId = page.substr(23);
+            //console.log("klasemen with competitionId: " + competitionId);
+            setKlasemenPage(currentSignal, competitionId);
+            setTitleForActivePage("Klasemen");
+            setButtonActive("menu-klasemen");
+            return;
+        }
+
+        if(page.includes("tim?competitionId=")) {
+            competitionId = page.substr(18);
+            //console.log("tim with competitionId: " + competitionId);
+            setTimPage(currentSignal, competitionId);
+            setTitleForActivePage("Tim");
+            setButtonActive("menu-tim");
+            return;
+        }
 
         switch (page) {
             case "pertandingan":
-                setPertandinganPage(currentSignal);
+                setPertandinganPage(currentSignal, -9999);
                 setTitleForActivePage("Pertandingan");
                 setButtonActive("menu-pertandingan");
                 break;
 
             case "klasemen":
-                setKlasemenPage(currentSignal);
+                setKlasemenPage(currentSignal, -9999);
                 setTitleForActivePage("Klasemen");
                 setButtonActive("menu-klasemen");
                 break;
 
             case "tim":
-                setTimPage(currentSignal);
+                setTimPage(currentSignal, -9999);
                 setTitleForActivePage("Tim");
                 setButtonActive("menu-tim");
                 break;
 
             case "timfavorit":
-                setTimFavoritPage(currentSignal);
+                setTimFavoritPage(currentSignal, -9999);
                 setTitleForActivePage("Tim Favorite");
                 setButtonActive("");
 
@@ -79,6 +107,7 @@ const navigationApp = () => {
                 break;
 
             default :
+                
                 break;
         
         }
