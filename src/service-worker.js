@@ -36,6 +36,7 @@ self.addEventListener("install", e => {
   e.waitUntil(
     caches.open(CACHE_NAME)
           .then(cache => cache.addAll(filesToCache))
+          .then(self.skipWaiting())
   );
 });
 
@@ -49,6 +50,7 @@ self.addEventListener("activate", e => {
           }
         })
       )
+      .then(self.clients.claim())
     )
   );
 });
