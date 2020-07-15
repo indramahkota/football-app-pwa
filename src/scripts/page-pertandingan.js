@@ -2,14 +2,22 @@ import { getFootballDataInCaches, getFootballData } from "./app-datasource.js";
 import generateInitialPage from "./gen-initial-page.js";
 import generateSelectCompetition from "./gen-select-competitions.js";
 import fetchErrorHandler from "./app-error-handler.js";
+import getFormattedDate from "./app-utilities";
 
 const generateMatchContent = (parent, jsonData) => {
     let htmlHelper = "";
     jsonData.forEach(element => {
+        const badgeColor = () => element.status === "FINISHED" ? "" : "red";
+        const badgeText = () => element.status === "FINISHED" ? "Selesai" : "Belum Selesai";
         htmlHelper += `
             <div class="col s12 m6">
                 <div class="card card-content padding-10">
                     <div class="row">
+                        <div class="card-title" style="padding: 0px 8px 12px;">${getFormattedDate(element.utcDate)}</div>
+                        <div style="padding-left:8px">Status<span class="new badge ${badgeColor()}" data-badge-caption="${badgeText()}"></span></div>
+                        <div class="divider"></div>
+                    </div>
+                    <div class="row" style="padding-top:12px">
                         <div class="col center side-percentage">
                             <div class="cut-text min-height-45">
                                 ${element.homeTeam.name}
