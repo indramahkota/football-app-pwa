@@ -8,6 +8,7 @@ const getTeamId = urlParameter => {
     return Number(urlSearchParams.get("teamId"));
 }
 
+/* Mengurutkan data berdasarkan abjad pada json value */
 /* referensi: https://www.sitepoint.com/sort-an-array-of-objects-in-javascript/ */
 const compareValues = (key, order = 'asc') => {
     return (a, b) => {
