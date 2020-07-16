@@ -2,6 +2,7 @@ import { setButtonActive, setTitleForActivePage } from "./app-state.js";
 import setPertandinganPage from "./page-pertandingan.js";
 import setKlasemenPage from "./page-klasemen.js";
 import setTimPage from "./page-tim.js";
+import setTimDetailPage from "./page-tim-detail.js";
 import setTimFavoritPage from "./page-tim-favorit.js";
 import { getCompetitionId } from "./app-utilities.js";
 
@@ -61,6 +62,14 @@ const navigationApp = () => {
             setTimPage(currentSignal,
                 getCompetitionId(page.replace("tim", "")));
             setTitleForActivePage("Tim");
+            setButtonActive("menu-tim");
+            return;
+        }
+
+        if(page.includes("timdetail?teamId=")) {
+            setTimDetailPage(currentSignal,
+                getCompetitionId(page.replace("timdetail", "")));
+            setTitleForActivePage("Tim Detail");
             setButtonActive("menu-tim");
             return;
         }
