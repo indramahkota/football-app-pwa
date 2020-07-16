@@ -4,6 +4,7 @@ const CACHE_NAME = "indramahkota-footballapp-v1";
 const filesToCache = [
   /* root folder */
   "/",
+  "/polyfill.js",
   "/bundle.js",
   "/bundle.css",
   "/worker.js",
