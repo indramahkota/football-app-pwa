@@ -93,8 +93,8 @@ const generateCompetitionData = (data, signal, competitionId) => {
 const generateMatchData = (signal, competitionId) => {
     /* cache first, the replace with original data from server */
     getFootballDataInCaches(`competitions/${competitionId}/matches?status=SCHEDULED`)
-    .then(data => generateMatchContent(document.querySelector("#page-content"), data.matches))
-    .catch(error => console.log(error.message));
+        .then(data => generateMatchContent(document.querySelector("#page-content"), data.matches))
+        .catch(error => console.log(error.message));
 
     if(navigator.onLine) {
         getFootballData(signal, `competitions/${competitionId}/matches?status=SCHEDULED`)
