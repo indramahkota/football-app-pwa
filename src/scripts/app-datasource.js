@@ -25,10 +25,10 @@ const getFootballData = async (signal, endPoint) => {
         },
         signal: signal
     });
-    if (response === undefined || response.status !== 200) {
-        return Promise.reject(new Error(`Code: ${response.status}, ${response.statusText}`));
+    if (response !== undefined && response.status === 200) {
+        return Promise.resolve(response.json());
     }
-    return Promise.resolve(response.json());
+    return Promise.reject(new Error(`Code: ${response.status}, ${response.statusText}`));
 }
 
 export { getFootballDataInCaches, getFootballData };
