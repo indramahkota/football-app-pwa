@@ -1,50 +1,34 @@
 import footballAppConstant from "./app-constants.js";
 
-const checkErrorInJsonResponse = jsonData => {
-    if(!jsonData.errorCode || jsonData.errorCode === null) {
-        return jsonData;
-    }
-    return Promise.reject(`Code: ${jsonData.errorCode}, ${jsonData.message}`);
-}
+const customUrl = footballAppConstant.proxyUrl + footballAppConstant.baseUrl;
 
-const getFootballDataInCaches = endPoint => {
-    const proxyurl = footballAppConstant.proxyUrl;
-    const url = `${footballAppConstant.baseUrl}${endPoint}`;
-
+const getFootballDataInCaches = async endPoint => {
     if("caches" in window) {
-        return caches.match(proxyurl + url)
-            .then(response => {
-                if(response !== undefined){
-                    return response.json();
-                }
-                return Promise.reject("No cache.");
-            })
-            .then(checkErrorInJsonResponse)
+        const response = await caches.match(customUrl + endPoint);
+        /* if no cache, response will be undefined */
+        if (response !== undefined) {
+            return Promise.resolve(response.json());
+        }
+        return Promise.reject(new Error("No cache."));
     }
-    return Promise.reject("No cache.");
+    return Promise.reject(new Error("No cache."));
 }
 
-const getFootballData = (signal, endPoint) => {
+const getFootballData = async (signal, endPoint) => {
     /* possible error: registered clients are allowed for 10 requests/minute (free plan). */
     /* if requset exceed response will be 429 (Too Many Requests) */
     /* avoid "No Access-Control-Allow-Origin header" */
     /* ref: https://stackoverflow.com/questions/43871637/no-access-control-allow-origin-header-is-present-on-the-requested-resource-whe */
-    const proxyurl = footballAppConstant.proxyUrl;
-    const url = `${footballAppConstant.baseUrl}${endPoint}`;
-
-    return fetch(proxyurl + url, {
+    const response = await fetch(customUrl + endPoint, {
         headers: {
             "X-Auth-Token": footballAppConstant.apiKey
         },
         signal: signal
-    })
-    .then(response => {
-        if(response === undefined || response.status !== 200) {
-            return Promise.reject(new Error(response.statusText));
-        }
-        return response.json();
-    })
-    .then(checkErrorInJsonResponse)
+    });
+    if (response === undefined || response.status !== 200) {
+        return Promise.reject(new Error(`Code: ${response.status}, ${response.statusText}`));
+    }
+    return Promise.resolve(response.json());
 }
 
 export { getFootballDataInCaches, getFootballData };
