@@ -15,8 +15,29 @@ const setButtonActive = id => {
     });
 };
 
+const setTabsActive = id => {
+    document.querySelectorAll("#team-tabs a").forEach(element => {
+        const elemParent = element.parentElement;
+        elemParent.classList.remove("deep-purple");
+        elemParent.classList.remove("lighten-5");
+        
+        element.classList.remove("active");
+        element.classList.remove("red-text");
+        element.className += " grey-text";
+
+    });
+    const reference = document.querySelector(`#${id}`);
+    reference.classList.remove("grey-text");
+    reference.className += " red-text";
+    reference.className += " active";
+
+    const parent = reference.parentElement;
+    parent.className += " deep-purple";
+    parent.className += " lighten-5";
+};
+
 const setTitleForActivePage = page => {
     document.title = `Football App | ${page}`;
 }
 
-export { setButtonActive, setTitleForActivePage };
+export { setButtonActive, setTabsActive, setTitleForActivePage };
