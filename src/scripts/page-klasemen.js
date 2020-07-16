@@ -5,6 +5,7 @@ import fetchErrorHandler from "./app-error-handler.js";
 import { compareValues } from "./app-utilities";
 
 const generateClassementContent = (parent, jsonData) => {
+    document.querySelector("#page-preloader").style.display = "none";
     let htmlHelper = "";
     
     if(jsonData.table.length === 0) {
@@ -71,64 +72,68 @@ const activateSelectFunctionality = () => {
     });
 }
 
-let classementCompetitionId;
-const generateCompetitionData = (data, signal, isFetch) => {
-    generateSelectCompetition(document.querySelector("#select-content"), data, classementCompetitionId);
+const generateCompetitionData = (data, signal, competitionId) => {
+    generateSelectCompetition(document.querySelector("#select-content"), data, competitionId);
     activateSelectFunctionality(signal);
 
-    if(classementCompetitionId !== -9999) {
-        if(isFetch) {
-            return getFootballData(signal, `competitions/${classementCompetitionId}/standings`);
-        }
-        return getFootballDataInCaches(`competitions/${classementCompetitionId}/standings`);
+    if(competitionId !== -9999) {
+        generateClassementData(signal, competitionId);
     } else {
-        if(isFetch) {
-            return getFootballData(signal, `competitions/${data[0].id}/standings`);
-        }
-        return getFootballDataInCaches(`competitions/${data[0].id}/standings`);
+        generateClassementData(signal, data[0].id);
     }
 }
 
-const generateClassementData = data => {
-    generateClassementContent(document.querySelector("#page-content"), data.standings[0]);
-    document.querySelector("#page-preloader").style.display = "none";
-}
-
-/* Mengakibatkan 2x perubahan halaman, 1: saat data offline tersedia, 2: saat data online tersedia */
-const setKlasemenPage = (signal, competitionId) => {
-    let parent = document.querySelector("#pageContent");
-    parent.innerHTML = "";
-
-    classementCompetitionId = competitionId;
-
-    generateInitialPage(parent);
-    document.querySelector("#page-preloader").style.display = "block";
-
-    getFootballDataInCaches("competitions")
-        .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
-        .then(data => data.sort(compareValues("name")))
-        .then(data => generateCompetitionData(data, signal, false))
-        .then(generateClassementData)
-        .catch(error => console.log(error))
+const generateClassementData = (signal, competitionId) => {
+    /* cache first, the replace with original data from server */
+    getFootballDataInCaches(`competitions/${competitionId}/standings`)
+        .then(data => generateClassementContent(document.querySelector("#page-content"), data.standings[0]))
+        .catch(error => console.log(error.message));
 
     if(navigator.onLine) {
-        getFootballData(signal, "competitions")
-            .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
-            .then(data => data.sort(compareValues("name")))
-            .then(data => generateCompetitionData(data, signal, true))
-            .then(generateClassementData)
+        getFootballData(signal, `competitions/${competitionId}/standings`)
+            .then(data => generateClassementContent(document.querySelector("#page-content"), data.standings[0]))
             .catch(error => {
                 if(error.name === 'AbortError') {
-                    console.log("Aborted! in Load Page");
+                    console.log("Aborted! => Load Matches");
                 } else {
-                    fetchErrorHandler(error, "Mohon maaf atas ketidaknyamanannya.");
+                    fetchErrorHandler(error.message, "Mohon maaf atas ketidaknyamanannya.");
                     document.querySelector("#page-preloader").style.display = "none";
-                    console.log(error);
                 }
             });
         return;
     }
     fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
+}
+
+const setKlasemenPage = (signal, competitionId) => {
+    let parent = document.querySelector("#pageContent");
+    parent.innerHTML = "";
+
+    generateInitialPage(parent);
+    document.querySelector("#page-preloader").style.display = "block";
+
+    /* always use cache, because static data. */
+    getFootballDataInCaches("competitions?plan=TIER_ONE")
+        .then(data => data.competitions.sort(compareValues("name")))
+        .then(data => generateCompetitionData(data, signal, competitionId))
+        .catch(error => {
+            if(error.message === "No cache." && navigator.onLine) {
+                getFootballData(signal, "competitions?plan=TIER_ONE")
+                .then(data => data.competitions.sort(compareValues("name")))
+                .then(data => generateCompetitionData(data, signal, competitionId))
+                .catch(error => {
+                    if(error.name === 'AbortError') {
+                        console.log("Aborted! => Load Competitions");
+                    } else {
+                        fetchErrorHandler(error, "Mohon maaf atas ketidaknyamanannya.");
+                        document.querySelector("#page-preloader").style.display = "none";
+                        console.log(error);
+                    }
+                });
+            } else {
+                fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
+            }
+        });
 }
 
 export default setKlasemenPage;

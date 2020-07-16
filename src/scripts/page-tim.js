@@ -7,6 +7,7 @@ import { compareValues } from "./app-utilities";
 import nullImage from "../assets/images/null-image.jpg";
 
 const generateTimContent = (parent, jsonData) => {
+    document.querySelector("#page-preloader").style.display = "none";
     let htmlHelper = "";
 
     if(jsonData.length === 0) {
@@ -62,66 +63,70 @@ const activateSelectFunctionality = () => {
     });
 }
 
-let teamCompetitionId;
-const generateCompetitionData = (data, signal, isFetch) => {
-    generateSelectCompetition(document.querySelector("#select-content"), data, teamCompetitionId);
+const generateCompetitionData = (data, signal, competitionId) => {
+    generateSelectCompetition(document.querySelector("#select-content"), data, competitionId);
     activateSelectFunctionality(signal);
 
-    if(teamCompetitionId !== -9999) {
-        if(isFetch) {
-            return getFootballData(signal, `competitions/${teamCompetitionId}/teams`);
-        }
-        return getFootballDataInCaches(`competitions/${teamCompetitionId}/teams`);
+    if(competitionId !== -9999) {
+        generateTeamData(signal, competitionId);
     } else {
-        if(isFetch) {
-            return getFootballData(signal, `competitions/${data[0].id}/teams`);
-        }
-        return getFootballDataInCaches(`competitions/${data[0].id}/teams`);
+        generateTeamData(signal, data[0].id);
     }
 }
 
-const generateTeamData = data => {
-    generateTimContent(document.querySelector("#page-content"), data);
-    document.querySelector("#page-preloader").style.display = "none";
-}
-
-/* Mengakibatkan 2x perubahan halaman, 1: saat data offline tersedia, 2: saat data online tersedia */
-const setTimPage = (signal, competitionId) => {
-    let parent = document.querySelector("#pageContent");
-    parent.innerHTML = "";
-
-    teamCompetitionId = competitionId;
-
-    generateInitialPage(parent);
-    document.querySelector("#page-preloader").style.display = "block";
-
-    getFootballDataInCaches("competitions")
-        .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
-        .then(data => data.sort(compareValues("name")))
-        .then(data => generateCompetitionData(data, signal, false))
+const generateTeamData = (signal, competitionId) => {
+    /* cache first, the replace with original data from server */
+    getFootballDataInCaches(`competitions/${competitionId}/teams`)
         .then(data => data.teams.sort(compareValues("name")))
-        .then(generateTeamData)
-        .catch(error => console.log(error))
+        .then(data => generateTimContent(document.querySelector("#page-content"), data))
+        .catch(error => console.log(error.message));
 
     if(navigator.onLine) {
-        getFootballData(signal, "competitions")
-            .then(data => data.competitions.filter(key => key.plan === "TIER_ONE"))
-            .then(data => data.sort(compareValues("name")))
-            .then(data => generateCompetitionData(data, signal, true))
+        getFootballData(signal, `competitions/${competitionId}/teams`)
             .then(data => data.teams.sort(compareValues("name")))
-            .then(generateTeamData)
+            .then(data => generateTimContent(document.querySelector("#page-content"), data))
             .catch(error => {
                 if(error.name === 'AbortError') {
-                    console.log("Aborted!");
+                    console.log("Aborted! => Load Matches");
                 } else {
-                    fetchErrorHandler(error, "Mohon maaf atas ketidaknyamanannya.");
+                    fetchErrorHandler(error.message, "Mohon maaf atas ketidaknyamanannya.");
                     document.querySelector("#page-preloader").style.display = "none";
-                    console.log(error);
                 }
             });
         return;
     }
     fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
+}
+
+const setTimPage = (signal, competitionId) => {
+    let parent = document.querySelector("#pageContent");
+    parent.innerHTML = "";
+
+    generateInitialPage(parent);
+    document.querySelector("#page-preloader").style.display = "block";
+
+    /* always use cache, because static data. */
+    getFootballDataInCaches("competitions?plan=TIER_ONE")
+        .then(data => data.competitions.sort(compareValues("name")))
+        .then(data => generateCompetitionData(data, signal, competitionId))
+        .catch(error => {
+            if(error.message === "No cache." && navigator.onLine) {
+                getFootballData(signal, "competitions?plan=TIER_ONE")
+                .then(data => data.competitions.sort(compareValues("name")))
+                .then(data => generateCompetitionData(data, signal, competitionId))
+                .catch(error => {
+                    if(error.name === 'AbortError') {
+                        console.log("Aborted! => Load Competitions");
+                    } else {
+                        fetchErrorHandler(error, "Mohon maaf atas ketidaknyamanannya.");
+                        document.querySelector("#page-preloader").style.display = "none";
+                        console.log(error);
+                    }
+                });
+            } else {
+                fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
+            }
+        });
 }
 
 export default setTimPage;
