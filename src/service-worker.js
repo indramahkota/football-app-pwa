@@ -62,8 +62,8 @@ self.addEventListener("fetch", e => {
       caches.open(CACHE_NAME).then(cache => 
           fetch(e.request).then(response => {
             cache.put(e.request.url, response.clone());
-            console.log(`Add cahche: ${e.request.url.replace(
-              footballAppConstant.proxyUrl+footballAppConstant.baseUrl, "")}`);
+            /* console.log(`Add cahche: ${e.request.url.replace(
+              footballAppConstant.proxyUrl+footballAppConstant.baseUrl, "")}`); */
             return response;
           })
       )
