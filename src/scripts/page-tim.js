@@ -32,7 +32,7 @@ const generateTimContent = (parent, jsonData) => {
                                 <img class="small-team-image" src="${element.crestUrl !== null
                                     && element.crestUrl !== ""
                                     ? element.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage}"
-                                    onerror="this.onerror=null;this.src='${nullImage}';console.log('Gambar ini diganti karena 404 not found.');" alt="" class="circle responsive-img">
+                                    onerror="this.onerror=null;this.src='${nullImage}';console.log('Gambar ini diganti karena 404 not found.');" alt="Team Image" class="circle responsive-img">
                             </div>
                             <div class="col s8" style="padding:0;margin:0;">
                                 <span class="card-title black-text truncate" style="padding:0;margin:0;">${element.name}</span>
