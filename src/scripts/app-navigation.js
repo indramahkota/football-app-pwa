@@ -4,7 +4,7 @@ import setKlasemenPage from "./page-klasemen.js";
 import setTimPage from "./page-tim.js";
 import setTimDetailPage from "./page-tim-detail.js";
 import setTimFavoritPage from "./page-tim-favorit.js";
-import { getCompetitionId } from "./app-utilities.js";
+import { getCompetitionId, getTeamId } from "./app-utilities.js";
 
 let currentController = new AbortController();
 let currentSignal = currentController.signal;
@@ -68,7 +68,7 @@ const navigationApp = () => {
 
         if(page.includes("timdetail?teamId=")) {
             setTimDetailPage(currentSignal,
-                getCompetitionId(page.replace("timdetail", "")));
+                getTeamId(page.replace("timdetail", "")));
             setTitleForActivePage("Tim Detail");
             setButtonActive("menu-tim");
             return;
