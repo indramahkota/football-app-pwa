@@ -109,10 +109,7 @@ const generateClassementData = (signal, competitionId) => {
 
 const setKlasemenPage = (signal, competitionId) => {
     let parent = document.querySelector("#pageContent");
-    parent.innerHTML = "";
-
     generateInitialPage(parent);
-    document.querySelector("#page-preloader").style.display = "block";
 
     /* always use cache, because static data. until developer detect changes */
     getFootballDataInCaches("competitions?plan=TIER_ONE")
