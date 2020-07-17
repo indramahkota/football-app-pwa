@@ -101,7 +101,7 @@ const setTimPage = (signal, competitionId) => {
     generateInitialPage(parent);
     document.querySelector("#page-preloader").style.display = "block";
 
-    /* always use cache, because static data. */
+    /* always use cache, because static data. until developer detect changes */
     getFootballDataInCaches("competitions?plan=TIER_ONE")
         .then(data => data.competitions.sort(compareValues("name")))
         .then(data => generateCompetitionData(data, signal, competitionId))
