@@ -3,6 +3,7 @@ import generateInitialPage from "./gen-initial-page.js";
 import generateSelectCompetition from "./gen-select-competitions.js";
 import fetchErrorHandler from "./app-error-handler.js";
 import { compareValues } from "./app-utilities";
+import { getFavoriteTeamDataById } from "./app-db-operation.js";
 
 import nullImage from "../assets/images/null-image.jpg";
 
@@ -23,10 +24,13 @@ const generateTimContent = (parent, jsonData) => {
 
     jsonData.forEach(element => {
         /* Team Image dapat merespon 404 */
-        const teamImage = (data.crestUrl !== undefined ||data.crestUrl !== null || data.crestUrl !== "") ? data.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage;
+        //console.log(`${typeof element.crestUrl} ${element.crestUrl === null ? "null" : ""} ${element.crestUrl === "" ? "kosong" : "" }`);
+        const teamImage = (element.crestUrl !== null && element.crestUrl !== "") ? element.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage;
+        
         htmlHelper += `
             <div class="col s12 m6">
                 <a href="#timdetail?teamId=${element.id}">
+                    
                     <div class="card-panel">
                         <div class="row">
                             <div class="col s4">

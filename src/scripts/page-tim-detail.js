@@ -77,7 +77,9 @@ const generateTeamDetailData = data => {
     const detailsSection = document.querySelector("#details-section");
     const playerSection = document.querySelector("#player-section");
 
-    const teamImage = (data.crestUrl !== undefined ||data.crestUrl !== null || data.crestUrl !== "") ? data.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage;
+    /* Team Image dapat merespon 404 */
+    //console.log(`${typeof data.crestUrl} ${data.crestUrl === null ? "null" : ""} ${data.crestUrl === "" ? "kosong" : "" }`);
+    let teamImage = (data.crestUrl !== null && data.crestUrl !== "") ? data.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage;
     
     teamSection.innerHTML = `
         <div class="card-image col s12 center">
