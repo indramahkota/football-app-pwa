@@ -129,8 +129,8 @@ module.exports = {
       ],
       start_url: "./",
       display: "standalone",
-      background_color: "#3E4EB8",
-      theme_color: "#2F3BA2",
+      background_color: "#00ACC1",
+      theme_color: "#00ACC1",
       fingerprints: false
     })
   ]
