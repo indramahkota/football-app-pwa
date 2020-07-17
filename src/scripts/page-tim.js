@@ -23,15 +23,14 @@ const generateTimContent = (parent, jsonData) => {
 
     jsonData.forEach(element => {
         /* Team Image dapat merespon 404 */
+        const teamImage = (data.crestUrl !== undefined ||data.crestUrl !== null || data.crestUrl !== "") ? data.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage;
         htmlHelper += `
             <div class="col s12 m6">
                 <a href="#timdetail?teamId=${element.id}">
                     <div class="card-panel">
                         <div class="row">
                             <div class="col s4">
-                                <img class="small-team-image" src="${element.crestUrl !== null
-                                    && element.crestUrl !== ""
-                                    ? element.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage}"
+                                <img class="small-team-image" src="${teamImage}"
                                     onerror="this.onerror=null;this.src='${nullImage}';console.log('Gambar ini diganti karena 404 not found.');" alt="Team Image" class="circle responsive-img">
                             </div>
                             <div class="col s8" style="padding:0;margin:0;">
