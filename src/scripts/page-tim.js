@@ -26,11 +26,10 @@ const generateTimContent = (parent, jsonData) => {
         /* Team Image dapat merespon 404 */
         //console.log(`${typeof element.crestUrl} ${element.crestUrl === null ? "null" : ""} ${element.crestUrl === "" ? "kosong" : "" }`);
         const teamImage = (element.crestUrl !== null && element.crestUrl !== "") ? element.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage;
-        
         htmlHelper += `
             <div class="col s12 m6">
                 <a href="#timdetail?teamId=${element.id}">
-                    
+                    ${element.favorite ? `<div><span class="new badge pink" data-badge-caption="Favorit"></span></div>` : ""}
                     <div class="card-panel">
                         <div class="row">
                             <div class="col s4">
@@ -73,16 +72,36 @@ const generateCompetitionData = (data, signal, competitionId) => {
     }
 }
 
+/* some magic from me :D */
+const checkData = async data => {
+    const content = await getFavoriteTeamDataById(data.id);
+    if(content !== undefined) {
+        return Object.assign(data, {favorite: true});
+    } else {
+        return Object.assign(data, {favorite: false});
+    }
+}
+
+const checkDataInDatabase = async data => {
+    let newData = [];
+    data.forEach(element => {
+        newData.push(checkData(element));
+    });
+    return Promise.all(newData);
+}
+
 const generateTeamData = (signal, competitionId) => {
     /* cache first, the replace with original data from server */
     getFootballDataInCaches(`competitions/${competitionId}/teams`)
         .then(data => data.teams.sort(compareValues("name")))
+        .then(data => checkDataInDatabase(data))
         .then(data => generateTimContent(document.querySelector("#page-content"), data))
         .catch(error => console.log(error.message));
 
     if(navigator.onLine) {
         getFootballData(signal, `competitions/${competitionId}/teams`)
             .then(data => data.teams.sort(compareValues("name")))
+            .then(data => checkDataInDatabase(data))
             .then(data => generateTimContent(document.querySelector("#page-content"), data))
             .catch(error => {
                 if(error.name === 'AbortError') {
