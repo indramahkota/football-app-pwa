@@ -1,7 +1,8 @@
 import { getFootballDataInCaches, getFootballData } from "./app-datasource.js";
 import fetchErrorHandler from "./app-error-handler.js";
 import { compareValues, getFormattedDate } from "./app-utilities";
-import {setTabsActive} from "./app-state.js";
+import { setTabsActive } from "./app-state.js";
+import { createFavoriteTeamData, getFavoriteTeamDataById, deleteFavoriteTeamDataById } from "./app-db-operation.js";
 
 import nullImage from "../assets/images/null-image.jpg";
 
@@ -76,19 +77,18 @@ const generateTeamDetailData = data => {
     const detailsSection = document.querySelector("#details-section");
     const playerSection = document.querySelector("#player-section");
 
+    const teamImage = (data.crestUrl !== undefined ||data.crestUrl !== null || data.crestUrl !== "") ? data.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage;
+    
     teamSection.innerHTML = `
         <div class="card-image col s12 center">
-            <img class="team-image" alt="Team Image" src="${data.crestUrl !== null
-                && data.crestUrl !== ""
-                ? data.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage}"
-                onerror="this.onerror=null;this.src='${nullImage}';console.log('Gambar ini diganti karena 404 not found.');">
+            <img class="team-image" alt="Team Image" src="${teamImage}" onerror="this.onerror=null;this.src='${nullImage}';console.log('Gambar ini diganti karena 404 not found.');">
         </div>
         <div class="row">
             <div class="col s9"">
                 <h5 class="card-title truncate">${data.name}</h5>
             </div>
             <div class="col s3 right-align" style="padding:8px;">
-                <a class="btn-floating waves-effect waves-light cyan lighten-2">
+                <a id="favorite-button" class="btn-floating waves-effect waves-light cyan lighten-2">
                     <i class="material-icons">favorite_border</i>
                 </a>
             </div>
@@ -102,6 +102,34 @@ const generateTeamDetailData = data => {
             </ul>
         </div>
     `;
+
+    const favoriteButton = document.querySelector("#favorite-button");
+    getFavoriteTeamDataById(data.id).then(data => {
+        if(data !== undefined) {
+            favoriteButton.innerHTML = `<i class="material-icons pink-text text-lighten-1">favorite</i>`;
+        }
+    })
+
+    favoriteButton.addEventListener("click", () => {
+        const addData = {
+            teamId: data.id,
+            nama: data.name,
+            image: teamImage,
+            area: data.area.name
+        }
+        getFavoriteTeamDataById(data.id).then(dbData => {
+            if(dbData === undefined) {
+                createFavoriteTeamData(addData)
+                .then(favoriteButton.innerHTML = `<i class="material-icons pink-text text-lighten-1">favorite</i>`)
+                .catch(error => console.log(error));
+            } else {
+                deleteFavoriteTeamDataById(data.id)
+                .then(favoriteButton.innerHTML = `<i class="material-icons">favorite_border</i>`)
+                .catch(error => console.log(error));
+            }
+        })
+        .catch(error => console.log(error));
+    });
 
     let count = 1;
     let coach = "";
@@ -128,9 +156,9 @@ const generateTeamDetailData = data => {
 
     detailsSection.innerHTML = `
         <div class="col s12">
-            <p class="cut-text">Area: ${data.area.name}</p>
-            <p class="cut-text">Pelatih: ${coach}</p>
-            <p class="cut-text">Address: ${data.address}</p>
+            <p class="cut-text" style="margin:0;padding:0;">Area: ${data.area.name}</p>
+            <p class="cut-text" style="margin:0;padding:0;">Pelatih: ${coach}</p>
+            <p class="cut-text" style="margin:0;padding:0;">Address: ${data.address}</p>
         </div>
     `;
 
@@ -199,28 +227,6 @@ const showHideTabsSectionElement = id => {
     document.querySelector("#player-section").style.display = "none";
     document.querySelector("#match-section").style.display = "none";
     document.querySelector(`#${id}`).style.display = "block";
-}
-
-const generateMatchData = (signal, competitionId) => {
-    /* cache first, the replace with original data from server */
-    getFootballDataInCaches(`competitions/${competitionId}/matches?status=SCHEDULED`)
-        .then(data => generateMatchContent(document.querySelector("#page-content"), data.matches))
-        .catch(error => console.log(error.message));
-
-    if(navigator.onLine) {
-        getFootballData(signal, `competitions/${competitionId}/matches?status=SCHEDULED`)
-            .then(data => generateMatchContent(document.querySelector("#page-content"), data.matches))
-            .catch(error => {
-                if(error.name === 'AbortError') {
-                    console.log("Aborted! => Load Matches");
-                } else {
-                    fetchErrorHandler(error.message, "Mohon maaf atas ketidaknyamanannya.");
-                    document.querySelector("#page-preloader").style.display = "none";
-                }
-            });
-        return;
-    }
-    fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
 }
 
 const setTimDetailPage = (signal, teamId) => {
