@@ -76,6 +76,7 @@ module.exports = {
       name: "Football App",
       short_name: "Football App",
       description: "Football App by Indra Mahkota",
+      gcm_sender_id: "792532488211",
       icons: [
         {
           src: path.resolve("src/assets/icons/manifest/icon-36x36.png"),
