@@ -107,9 +107,7 @@ const generateMatchData = (signal, competitionId) => {
                     document.querySelector("#page-preloader").style.display = "none";
                 }
             });
-        return;
     }
-    fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
 }
 
 const setPertandinganPage = (signal, competitionId) => {
@@ -134,8 +132,6 @@ const setPertandinganPage = (signal, competitionId) => {
                         console.log(error);
                     }
                 });
-            } else {
-                fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
             }
         });
 }

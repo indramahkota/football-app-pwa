@@ -111,9 +111,7 @@ const generateTeamData = (signal, competitionId) => {
                     document.querySelector("#page-preloader").style.display = "none";
                 }
             });
-        return;
     }
-    fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
 }
 
 const setTimPage = (signal, competitionId) => {
@@ -138,8 +136,6 @@ const setTimPage = (signal, competitionId) => {
                         console.log(error);
                     }
                 });
-            } else {
-                fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
             }
         });
 }

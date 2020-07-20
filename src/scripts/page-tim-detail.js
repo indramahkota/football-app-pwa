@@ -1,7 +1,6 @@
-import M from "materialize-css/dist/js/materialize.min.js";
 import { getFootballDataInCaches, getFootballData } from "./app-datasource.js";
 import fetchErrorHandler from "./app-error-handler.js";
-import { compareValues, getFormattedDate } from "./app-utilities";
+import { compareValues, getFormattedDate, showToast } from "./app-utilities";
 import { setTabsActive } from "./app-state.js";
 import { createFavoriteTeamData, getFavoriteTeamDataById, deleteFavoriteTeamDataById } from "./app-db-operation.js";
 
@@ -125,14 +124,14 @@ const generateTeamDetailData = data => {
             if(dbData === undefined) {
                 createFavoriteTeamData(addData)
                 .then(() => {
-                    M.toast({html: "Berhasil menambahkan tim favorit!"});
+                    showToast("Berhasil menambahkan tim favorit!");
                     favoriteButton.innerHTML = `<i class="material-icons pink-text text-lighten-1">favorite</i>`
                 })
                 .catch(error => console.log(error));
             } else {
                 deleteFavoriteTeamDataById(data.id)
                 .then(() => {
-                    M.toast({html: "Berhasil menghapus tim favorit!"});
+                    showToast("Berhasil menghapus tim favorit!");
                     favoriteButton.innerHTML = `<i class="material-icons">favorite_border</i>`
                 })
                 .catch(error => console.log(error));
@@ -281,8 +280,6 @@ const setTimDetailPage = (signal, teamId) => {
                         console.log(error);
                     }
                 });
-            } else {
-                fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
             }
         });
     
@@ -302,9 +299,7 @@ const setTimDetailPage = (signal, teamId) => {
                     document.querySelector("#page-preloader").style.display = "none";
                 }
             });
-        return;
     }
-    fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
 }
 
 export default setTimDetailPage;

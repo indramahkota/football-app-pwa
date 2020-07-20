@@ -2,7 +2,7 @@ import { getFootballDataInCaches, getFootballData } from "./app-datasource.js";
 import generateInitialPage from "./gen-initial-page.js";
 import generateSelectCompetition from "./gen-select-competitions.js";
 import fetchErrorHandler from "./app-error-handler.js";
-import { compareValues } from "./app-utilities";
+import { compareValues, showOfflineToast } from "./app-utilities";
 
 const generateClassementContent = (parent, jsonData) => {
     document.querySelector("#page-preloader").style.display = "none";
@@ -102,9 +102,7 @@ const generateClassementData = (signal, competitionId) => {
                     document.querySelector("#page-preloader").style.display = "none";
                 }
             });
-        return;
     }
-    fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
 }
 
 const setKlasemenPage = (signal, competitionId) => {
@@ -129,8 +127,6 @@ const setKlasemenPage = (signal, competitionId) => {
                         console.log(error);
                     }
                 });
-            } else {
-                fetchErrorHandler("Anda saat ini sedang offline!", "Lanjutkan dengan halaman tersimpan?");
             }
         });
 }

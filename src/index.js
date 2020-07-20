@@ -1,5 +1,6 @@
 import M from "materialize-css/dist/js/materialize.min.js";
 import navigationApp from "./scripts/app-navigation.js";
+import { showOfflineToast, dismissOfflineToast } from "./scripts/app-utilities.js";
 
 import "materialize-css/dist/css/materialize.min.css";
 import "material-icons/iconfont/material-icons.css";
@@ -11,7 +12,7 @@ document.querySelector("main").innerHTML = require("./components/main-app/templa
 document.querySelector("aside").innerHTML = require("./components/side-bar/template.html");
 document.querySelector("modal").innerHTML = require("./components/app-modal/template.html");
 
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", () => {
   const sidenav = document.querySelectorAll(".sidenav");
   M.Sidenav.init(sidenav);
 
@@ -24,7 +25,11 @@ document.addEventListener("DOMContentLoaded", () => {
   M.Modal.init(modal);
 
   navigationApp();
+  
 });
+
+window.addEventListener('online',  () => dismissOfflineToast());
+window.addEventListener('offline', () => showOfflineToast());
 
 const urlBase64ToUint8Array = base64String => {
   const padding = "=".repeat((4 - base64String.length % 4) % 4);

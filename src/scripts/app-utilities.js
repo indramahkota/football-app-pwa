@@ -51,4 +51,18 @@ const getFormattedDate = utcDate => {
     return `${day}, ${date} ${month} ${year}`;
 }
 
-export { getCompetitionId, getTeamId, compareValues, getFormattedDate };
+const showToast = message => {
+    M.toast({html: message, displayLength: 1500});
+}
+
+const showOfflineToast = () => {
+    dismissOfflineToast();
+    M.toast({html: `<span>Anda saat ini sedang offline!</span><button id="toast-dismiss-button" class="btn-flat toast-action">Abaikan</button>`, displayLength: Infinity, inDuration: 0, outDuration: 0});
+    document.querySelector("#toast-dismiss-button").addEventListener("click", () => dismissOfflineToast());
+}
+
+const dismissOfflineToast = () => {
+    M.Toast.dismissAll();
+}
+
+export { getCompetitionId, getTeamId, compareValues, getFormattedDate, showToast, showOfflineToast, dismissOfflineToast };
