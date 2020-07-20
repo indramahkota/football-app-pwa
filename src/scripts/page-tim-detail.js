@@ -79,11 +79,12 @@ const generateTeamDetailData = data => {
 
     /* Team Image dapat merespon 404 */
     //console.log(`${typeof data.crestUrl} ${data.crestUrl === null ? "null" : ""} ${data.crestUrl === "" ? "kosong" : "" }`);
-    let teamImage = (data.crestUrl !== null && data.crestUrl !== "") ? data.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage;
+    let teamImage = (data.crestUrl !== null && data.crestUrl !== "") ? data.crestUrl.replace(/^http:\/\//i, "https://") : nullImage;
     
     teamSection.innerHTML = `
         <div class="card-image col s12 center">
-            <img class="team-image" alt="Team Image" src="${teamImage}" onerror="this.onerror=null;this.src='${nullImage}';console.log('Gambar ini diganti karena 404 not found.');">
+            <img class="team-image" alt="Team Image" src="${teamImage}"
+                onerror="this.onerror=null;this.src='${nullImage}';console.log('Gambar ini diganti karena 404 not found.');">
         </div>
         <div class="row">
             <div class="col s9"">
@@ -170,7 +171,7 @@ const generateTeamDetailData = data => {
     M.Tabs.init(tabs);
 
     const tabElement = document.querySelector("#team-tabs");
-    tabElement.addEventListener("click", (e) => {
+    tabElement.addEventListener("click", e => {
         switch (e.target.innerHTML) {
             case "Detail":
                 setTabsActive("details-tab");
@@ -265,7 +266,7 @@ const setTimDetailPage = (signal, teamId) => {
                 getFootballData(signal, `teams/${teamId}`)
                 .then(data => generateTeamDetailData(data))
                 .catch(error => {
-                    if(error.name === 'AbortError') {
+                    if(error.name === "AbortError") {
                         console.log("Aborted! => Load Competitions");
                     } else {
                         fetchErrorHandler(error, "Mohon maaf atas ketidaknyamanannya.");
@@ -278,7 +279,7 @@ const setTimDetailPage = (signal, teamId) => {
             }
         });
     
-    /* cache first, the replace with original data from server */
+    /* cache first, then replace with original data from server */
     getFootballDataInCaches(`teams/${teamId}/matches?status=SCHEDULED`)
         .then(data => generateMatchContent(document.querySelector("#match-section"), data.matches))
         .catch(error => console.log(error.message));
@@ -287,7 +288,7 @@ const setTimDetailPage = (signal, teamId) => {
         getFootballData(signal, `teams/${teamId}/matches?status=SCHEDULED`)
             .then(data => generateMatchContent(document.querySelector("#match-section"), data.matches))
             .catch(error => {
-                if(error.name === 'AbortError') {
+                if(error.name === "AbortError") {
                     console.log("Aborted! => Load Matches");
                 } else {
                     fetchErrorHandler(error.message, "Mohon maaf atas ketidaknyamanannya.");

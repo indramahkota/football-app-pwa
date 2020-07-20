@@ -91,7 +91,7 @@ const generateCompetitionData = (data, signal, competitionId) => {
 }
 
 const generateMatchData = (signal, competitionId) => {
-    /* cache first, the replace with original data from server */
+    /* cache first, then replace with original data from server */
     getFootballDataInCaches(`competitions/${competitionId}/matches?status=SCHEDULED`)
         .then(data => generateMatchContent(document.querySelector("#page-content"), data.matches))
         .catch(error => console.log(error.message));
@@ -100,7 +100,7 @@ const generateMatchData = (signal, competitionId) => {
         getFootballData(signal, `competitions/${competitionId}/matches?status=SCHEDULED`)
             .then(data => generateMatchContent(document.querySelector("#page-content"), data.matches))
             .catch(error => {
-                if(error.name === 'AbortError') {
+                if(error.name === "AbortError") {
                     console.log("Aborted! => Load Matches");
                 } else {
                     fetchErrorHandler(error.message, "Mohon maaf atas ketidaknyamanannya.");
@@ -126,7 +126,7 @@ const setPertandinganPage = (signal, competitionId) => {
                 .then(data => data.competitions.sort(compareValues("name")))
                 .then(data => generateCompetitionData(data, signal, competitionId))
                 .catch(error => {
-                    if(error.name === 'AbortError') {
+                    if(error.name === "AbortError") {
                         console.log("Aborted! => Load Competitions");
                     } else {
                         fetchErrorHandler(error, "Mohon maaf atas ketidaknyamanannya.");

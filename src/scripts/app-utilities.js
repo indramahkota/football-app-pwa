@@ -10,11 +10,11 @@ const getTeamId = urlParameter => {
 
 /* Mengurutkan data berdasarkan abjad pada json value */
 /* referensi: https://www.sitepoint.com/sort-an-array-of-objects-in-javascript/ */
-const compareValues = (key, order = 'asc') => {
+const compareValues = (key, order = "asc") => {
     return (a, b) => {
-      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) return 0;
+      if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) return 0;
       const comparison = a[key].localeCompare(b[key]);
-      return ((order === 'desc') ? (comparison * -1) : comparison);
+      return ((order === "desc") ? (comparison * -1) : comparison);
     };
 }
 

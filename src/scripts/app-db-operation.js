@@ -1,10 +1,10 @@
-import { openDB } from 'idb';
+import { openDB } from "idb";
 
 const getFavoriteTeamDatabase = async () => {
-    return await openDB('FootballAppIndraMahkota', 1, {
+    return await openDB("FootballAppIndraMahkota", 1, {
         upgrade: db => {
             if(!db.objectStoreNames.contains("teamfavorites")) {
-                const store = db.createObjectStore('teamfavorites', {keyPath: 'teamId'});
+                const store = db.createObjectStore("teamfavorites", {keyPath: "teamId"});
                 store.createIndex("nama", "nama", { unique: false });
                 store.createIndex("area", "area", { unique: false });
                 store.createIndex("image", "image", { unique: false });

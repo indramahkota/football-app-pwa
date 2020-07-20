@@ -7,7 +7,7 @@ const getFootballDataInCaches = async endPoint => {
     if("caches" in window) {
         const response = await caches.match(customUrl + endPoint);
         /* if no cache, response will be undefined */
-        if (response !== undefined && response.status === 200) {
+        if(response !== undefined && response.status === 200) {
             return await Promise.resolve(response.json());
         }
         return await Promise.reject(new Error("No cache."));
@@ -26,7 +26,7 @@ const getFootballData = async (signal, endPoint) => {
         },
         signal: signal
     });
-    if (response !== undefined && response.status === 200) {
+    if(response !== undefined && response.status === 200) {
         return await Promise.resolve(response.json());
     }
     return await Promise.reject(new Error(`Code: ${response.status}, ${response.statusText}`));

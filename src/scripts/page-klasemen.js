@@ -86,7 +86,7 @@ const generateCompetitionData = (data, signal, competitionId) => {
 }
 
 const generateClassementData = (signal, competitionId) => {
-    /* cache first, the replace with original data from server */
+    /* cache first, then replace with original data from server */
     getFootballDataInCaches(`competitions/${competitionId}/standings`)
         .then(data => generateClassementContent(document.querySelector("#page-content"), data.standings[0]))
         .catch(error => console.log(error.message));
@@ -95,7 +95,7 @@ const generateClassementData = (signal, competitionId) => {
         getFootballData(signal, `competitions/${competitionId}/standings`)
             .then(data => generateClassementContent(document.querySelector("#page-content"), data.standings[0]))
             .catch(error => {
-                if(error.name === 'AbortError') {
+                if(error.name === "AbortError") {
                     console.log("Aborted! => Load Matches");
                 } else {
                     fetchErrorHandler(error.message, "Mohon maaf atas ketidaknyamanannya.");
@@ -121,7 +121,7 @@ const setKlasemenPage = (signal, competitionId) => {
                 .then(data => data.competitions.sort(compareValues("name")))
                 .then(data => generateCompetitionData(data, signal, competitionId))
                 .catch(error => {
-                    if(error.name === 'AbortError') {
+                    if(error.name === "AbortError") {
                         console.log("Aborted! => Load Competitions");
                     } else {
                         fetchErrorHandler(error, "Mohon maaf atas ketidaknyamanannya.");

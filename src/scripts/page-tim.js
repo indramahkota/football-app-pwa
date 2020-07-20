@@ -25,7 +25,7 @@ const generateTimContent = (parent, jsonData) => {
     jsonData.forEach(element => {
         /* Team Image dapat merespon 404 */
         //console.log(`${typeof element.crestUrl} ${element.crestUrl === null ? "null" : ""} ${element.crestUrl === "" ? "kosong" : "" }`);
-        const teamImage = (element.crestUrl !== null && element.crestUrl !== "") ? element.crestUrl.replace(/^http:\/\//i, 'https://') : nullImage;
+        const teamImage = (element.crestUrl !== null && element.crestUrl !== "") ? element.crestUrl.replace(/^http:\/\//i, "https://") : nullImage;
         htmlHelper += `
             <div class="col s12 m6">
                 <a href="#timdetail?teamId=${element.id}">
@@ -91,7 +91,7 @@ const checkDataInDatabase = async data => {
 }
 
 const generateTeamData = (signal, competitionId) => {
-    /* cache first, the replace with original data from server */
+    /* cache first, then replace with original data from server */
     getFootballDataInCaches(`competitions/${competitionId}/teams`)
         .then(data => data.teams.sort(compareValues("name")))
         .then(data => checkDataInDatabase(data))
@@ -104,7 +104,7 @@ const generateTeamData = (signal, competitionId) => {
             .then(data => checkDataInDatabase(data))
             .then(data => generateTimContent(document.querySelector("#page-content"), data))
             .catch(error => {
-                if(error.name === 'AbortError') {
+                if(error.name === "AbortError") {
                     console.log("Aborted! => Load Matches");
                 } else {
                     fetchErrorHandler(error.message, "Mohon maaf atas ketidaknyamanannya.");
@@ -130,7 +130,7 @@ const setTimPage = (signal, competitionId) => {
                 .then(data => data.competitions.sort(compareValues("name")))
                 .then(data => generateCompetitionData(data, signal, competitionId))
                 .catch(error => {
-                    if(error.name === 'AbortError') {
+                    if(error.name === "AbortError") {
                         console.log("Aborted! => Load Competitions");
                     } else {
                         fetchErrorHandler(error, "Mohon maaf atas ketidaknyamanannya.");
