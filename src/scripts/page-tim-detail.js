@@ -1,3 +1,4 @@
+import M from "materialize-css/dist/js/materialize.min.js";
 import { getFootballDataInCaches, getFootballData } from "./app-datasource.js";
 import fetchErrorHandler from "./app-error-handler.js";
 import { compareValues, getFormattedDate } from "./app-utilities";
@@ -123,11 +124,17 @@ const generateTeamDetailData = data => {
         getFavoriteTeamDataById(data.id).then(dbData => {
             if(dbData === undefined) {
                 createFavoriteTeamData(addData)
-                .then(favoriteButton.innerHTML = `<i class="material-icons pink-text text-lighten-1">favorite</i>`)
+                .then(() => {
+                    M.toast({html: "Berhasil menambahkan tim favorit!"});
+                    favoriteButton.innerHTML = `<i class="material-icons pink-text text-lighten-1">favorite</i>`
+                })
                 .catch(error => console.log(error));
             } else {
                 deleteFavoriteTeamDataById(data.id)
-                .then(favoriteButton.innerHTML = `<i class="material-icons">favorite_border</i>`)
+                .then(() => {
+                    M.toast({html: "Berhasil menghapus tim favorit!"});
+                    favoriteButton.innerHTML = `<i class="material-icons">favorite_border</i>`
+                })
                 .catch(error => console.log(error));
             }
         })
