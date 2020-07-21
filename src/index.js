@@ -1,10 +1,10 @@
-import M from "materialize-css/dist/js/materialize.min.js";
-import navigationApp from "./scripts/app-navigation.js";
-import { showOfflineToast, dismissOfflineToast } from "./scripts/app-utilities.js";
-
 import "materialize-css/dist/css/materialize.min.css";
 import "material-icons/iconfont/material-icons.css";
 import "./styles/styles.css";
+
+import M from "materialize-css";
+import navigationApp from "./scripts/app-navigation.js";
+import { showOfflineToast, dismissOfflineToast } from "./scripts/app-utilities.js";
 
 window.addEventListener("DOMContentLoaded", () => {
   const sidenav = document.querySelectorAll(".sidenav");
@@ -69,9 +69,9 @@ if("serviceWorker" in navigator) {
             )
             .then(subscribe => {
               console.log(`endpoint: "${subscribe.endpoint}", keys: { p256dh: "${btoa(String.fromCharCode.apply(null, new Uint8Array(subscribe.getKey("p256dh"))))}", auth: "${btoa(String.fromCharCode.apply(null, new Uint8Array(subscribe.getKey("auth"))))}"}`);
-              /* console.log("Berhasil melakukan subscribe dengan endpoint: ", subscribe.endpoint);
-              console.log("Berhasil melakukan subscribe dengan p256dh key: ", btoa(String.fromCharCode.apply(null, new Uint8Array(subscribe.getKey("p256dh")))));
-              console.log("Berhasil melakukan subscribe dengan auth key: ", btoa(String.fromCharCode.apply(null, new Uint8Array(subscribe.getKey("auth"))))); */
+              // console.log("Berhasil melakukan subscribe dengan endpoint: ", subscribe.endpoint);
+              // console.log("Berhasil melakukan subscribe dengan p256dh key: ", btoa(String.fromCharCode.apply(null, new Uint8Array(subscribe.getKey("p256dh")))));
+              // console.log("Berhasil melakukan subscribe dengan auth key: ", btoa(String.fromCharCode.apply(null, new Uint8Array(subscribe.getKey("auth")))));
             })
             .catch(e =>
               console.error("Tidak dapat melakukan subscribe ", e.message)
