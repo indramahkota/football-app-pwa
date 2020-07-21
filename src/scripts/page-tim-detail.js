@@ -1,5 +1,5 @@
 import { getFootballDataInCaches, getFootballData } from "./app-datasource.js";
-import fetchErrorHandler from "./app-error-handler.js";
+import errorPopUpHandler from "./app-error-handler.js";
 import { compareValues, getFormattedDate, showToast } from "./app-utilities";
 import { setTabsActive } from "./app-state.js";
 import { createFavoriteTeamData, getFavoriteTeamDataById, deleteFavoriteTeamDataById } from "./app-db-operation.js";
@@ -275,7 +275,7 @@ const setTimDetailPage = (signal, teamId) => {
                     if(error.name === "AbortError") {
                         console.log("Aborted! => Load Competitions");
                     } else {
-                        fetchErrorHandler(error, "Mohon maaf atas ketidaknyamanannya.");
+                        errorPopUpHandler(error, "Mohon maaf atas ketidaknyamanannya.");
                         document.querySelector("#page-preloader").style.display = "none";
                         console.log(error);
                     }
@@ -295,7 +295,7 @@ const setTimDetailPage = (signal, teamId) => {
                 if(error.name === "AbortError") {
                     console.log("Aborted! => Load Matches");
                 } else {
-                    fetchErrorHandler(error.message, "Mohon maaf atas ketidaknyamanannya.");
+                    errorPopUpHandler(error.message, "Mohon maaf atas ketidaknyamanannya.");
                     document.querySelector("#page-preloader").style.display = "none";
                 }
             });

@@ -1,4 +1,4 @@
-const generateSelectCompetition = (parent, jsonData, competitionId) => {
+const generateCompetition = (parent, jsonData, competitionId) => {
     const compId = Number(competitionId);
     let htmlHelper = `
         <div class="input-field col s12">
@@ -19,4 +19,4 @@ const generateSelectCompetition = (parent, jsonData, competitionId) => {
     parent.innerHTML = htmlHelper;
 }
 
-export default generateSelectCompetition;
+export default generateCompetition;

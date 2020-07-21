@@ -1,7 +1,7 @@
 import { getFootballDataInCaches, getFootballData } from "./app-datasource.js";
 import generateInitialPage from "./gen-initial-page.js";
-import generateSelectCompetition from "./gen-select-competitions.js";
-import fetchErrorHandler from "./app-error-handler.js";
+import generateCompetition from "./gen-competitions.js";
+import errorPopUpHandler from "./app-error-handler.js";
 import { compareValues } from "./app-utilities";
 
 const generateClassementContent = (parent, jsonData) => {
@@ -75,7 +75,7 @@ const activateSelectFunctionality = () => {
 }
 
 const generateCompetitionData = (data, signal, competitionId) => {
-    generateSelectCompetition(document.querySelector("#select-content"), data, competitionId);
+    generateCompetition(document.querySelector("#select-content"), data, competitionId);
     activateSelectFunctionality(signal);
 
     if(competitionId !== -9999) {
@@ -98,7 +98,7 @@ const generateClassementData = (signal, competitionId) => {
                 if(error.name === "AbortError") {
                     console.log("Aborted! => Load Matches");
                 } else {
-                    fetchErrorHandler(error.message, "Mohon maaf atas ketidaknyamanannya.");
+                    errorPopUpHandler(error.message, "Mohon maaf atas ketidaknyamanannya.");
                     document.querySelector("#page-preloader").style.display = "none";
                 }
             });
@@ -122,7 +122,7 @@ const setKlasemenPage = (signal, competitionId) => {
                     if(error.name === "AbortError") {
                         console.log("Aborted! => Load Competitions");
                     } else {
-                        fetchErrorHandler(error, "Mohon maaf atas ketidaknyamanannya.");
+                        errorPopUpHandler(error, "Mohon maaf atas ketidaknyamanannya.");
                         document.querySelector("#page-preloader").style.display = "none";
                         console.log(error);
                     }
