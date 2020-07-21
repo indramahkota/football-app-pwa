@@ -42,7 +42,7 @@ const navigationApp = () => {
 
         setCurrentControllerSignal();
 
-        if(page.includes("pertandingan?competitionId=")) {
+        if(page.includes("pertandingan?competition=")) {
             setPertandinganPage(currentSignal,
                 getCompetitionId(page.replace("pertandingan", "")));
             setTitleForActivePage("Pertandingan");
@@ -50,7 +50,7 @@ const navigationApp = () => {
             return;
         }
 
-        if(page.includes("klasemen?competitionId=")) {
+        if(page.includes("klasemen?competition=")) {
             setKlasemenPage(currentSignal,
                 getCompetitionId(page.replace("klasemen", "")));
             setTitleForActivePage("Klasemen");
@@ -58,7 +58,7 @@ const navigationApp = () => {
             return;
         }
 
-        if(page.includes("tim?competitionId=")) {
+        if(page.includes("tim?competition=")) {
             setTimPage(currentSignal,
                 getCompetitionId(page.replace("tim", "")));
             setTitleForActivePage("Tim");
@@ -66,9 +66,9 @@ const navigationApp = () => {
             return;
         }
 
-        if(page.includes("timdetail?teamId=")) {
+        if(page.includes("tim/detail?id=")) {
             setTimDetailPage(currentSignal,
-                getTeamId(page.replace("timdetail", "")));
+                getTeamId(page.replace("tim/detail", "")));
             setTitleForActivePage("Tim Detail");
             setButtonActive("menu-tim");
             return;

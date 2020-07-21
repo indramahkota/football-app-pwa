@@ -75,7 +75,7 @@ const activateSelectFunctionality = () => {
     if(instance === null) return;
 
     instance.addEventListener("change", event => {
-        location = `#pertandingan?competitionId=${event.target.value}`;
+        location = `#pertandingan?competition=${event.target.value}`;
     });
 }
 

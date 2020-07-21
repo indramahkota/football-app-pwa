@@ -28,7 +28,7 @@ const generateTimContent = (parent, jsonData) => {
         const teamImage = (element.crestUrl !== null && element.crestUrl !== "") ? element.crestUrl.replace(/^http:\/\//i, "https://") : nullImage;
         htmlHelper += `
             <div class="col s12 m6">
-                <a href="#timdetail?teamId=${element.id}">
+                <a href="#tim/detail?id=${element.id}">
                     ${element.favorite ? `<div><span class="new badge pink" data-badge-caption="Favorit"></span></div>` : ""}
                     <div class="card-panel">
                         <div class="row">
@@ -57,7 +57,7 @@ const activateSelectFunctionality = () => {
     if(instance === null) return;
     
     instance.addEventListener("change", event => {
-        location = `#tim?competitionId=${event.target.value}`;
+        location = `#tim?competition=${event.target.value}`;
     });
 }
 

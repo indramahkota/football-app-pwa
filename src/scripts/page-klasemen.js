@@ -2,7 +2,7 @@ import { getFootballDataInCaches, getFootballData } from "./app-datasource.js";
 import generateInitialPage from "./gen-initial-page.js";
 import generateSelectCompetition from "./gen-select-competitions.js";
 import fetchErrorHandler from "./app-error-handler.js";
-import { compareValues, showOfflineToast } from "./app-utilities";
+import { compareValues } from "./app-utilities";
 
 const generateClassementContent = (parent, jsonData) => {
     document.querySelector("#page-preloader").style.display = "none";
@@ -70,7 +70,7 @@ const activateSelectFunctionality = () => {
     if(instance === null) return;
 
     instance.addEventListener("change", event => {
-        location = `#klasemen?competitionId=${event.target.value}`;
+        location = `#klasemen?competition=${event.target.value}`;
     });
 }
 

@@ -1,11 +1,11 @@
 const getCompetitionId = urlParameter => {
     let urlSearchParams = new URLSearchParams(urlParameter);
-    return Number(urlSearchParams.get("competitionId"));
+    return Number(urlSearchParams.get("competition"));
 }
 
 const getTeamId = urlParameter => {
     let urlSearchParams = new URLSearchParams(urlParameter);
-    return Number(urlSearchParams.get("teamId"));
+    return Number(urlSearchParams.get("id"));
 }
 
 /* Mengurutkan data berdasarkan abjad pada json value */

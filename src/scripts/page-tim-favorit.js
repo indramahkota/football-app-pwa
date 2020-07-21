@@ -19,7 +19,7 @@ const generateTimContent = (parent, jsonData) => {
     jsonData.forEach(element => {
         htmlHelper += `
                 <div class="col s12 m6">
-                    <a href="#timdetail?teamId=${element.teamId}">
+                    <a href="#tim/detail?id=${element.teamId}">
                         <div><span class="new badge pink" data-badge-caption="Favorit"></span></div>
                         <div class="card-panel">
                             <div class="row">
