@@ -4,6 +4,13 @@ const getFavoriteTeamDatabase = async () => {
     return await openDB("FootballAppIndraMahkota", 1, {
         upgrade: db => {
             if(!db.objectStoreNames.contains("teamfavorites")) {
+                /* 
+                    Create inline keys object store.
+                    Example for out-of-line keys, db.createObjectStore(OBJECT_STORE_NAME);
+
+                    inline access: store.add({keypath, otherdata});
+                    out-of-line access: store.add(data, key);
+                */
                 const store = db.createObjectStore("teamfavorites", {keyPath: "teamId"});
                 store.createIndex("nama", "nama", { unique: false });
                 store.createIndex("area", "area", { unique: false });
