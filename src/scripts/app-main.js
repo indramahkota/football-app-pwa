@@ -77,20 +77,11 @@ const navigate = () => {
             setButtonActive("menu-tim");
             break;
 
-        case "timfavorit":
+        case "tim/favorit":
             setTimFavoritPage(currentSignal, -9999);
             setTitleForActivePage("Tim Favorite");
             setButtonActive("");
-            const sidenavInstance = M.Sidenav.getInstance(sidenav);
-            if(sidenavInstance.isOpen) sidenavInstance.close();
-            break;
-        
-        case "keluar":
-            modal.querySelector("#logout-button").addEventListener("click", () => {
-                location = "./";
-            });
             M.Sidenav.getInstance(document.querySelector(".sidenav")).close();
-            M.Modal.getInstance(document.querySelector("#keluar-modal")).open();
             break;
 
         default :
@@ -115,8 +106,26 @@ window.addEventListener("DOMContentLoaded", () => {
         if(!parent.id.includes("menu")) return;
         element.addEventListener("click", () => {
             M.Sidenav.getInstance(document.querySelector(".sidenav")).close();
+            if(parent.id === "menu-keluar") {
+                document.querySelector("#logout-button").addEventListener("click", () => {
+                    location = "./";
+                });
+                M.Modal.getInstance(document.querySelector("#keluar-modal")).open();
+                return;
+            }
             setButtonActive(parent.getAttribute("id"));
         });
+    });
+
+    document.querySelector("#button-offline").addEventListener("click", () => {
+        M.Sidenav.getInstance(document.querySelector(".sidenav")).close();
+    });
+
+    document.querySelector("#topnavexitbtn").addEventListener("click", () => {
+        document.querySelector("#logout-button").addEventListener("click", () => {
+            location = "./";
+        });
+        M.Modal.getInstance(document.querySelector("#keluar-modal")).open();
     });
 
     navigate();      
