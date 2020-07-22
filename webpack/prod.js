@@ -1,5 +1,6 @@
 const merge = require("webpack-merge");
 const base = require("./base");
+const webpack = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
@@ -13,9 +14,15 @@ module.exports = merge(base, {
     maxEntrypointSize: 900000,
     maxAssetSize: 900000,
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+  ],
   optimization: {
     minimizer: [
       new TerserPlugin({
+        test: /\.m?js$/,
         terserOptions: {
           output: {
             comments: false

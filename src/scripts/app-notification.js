@@ -10,18 +10,8 @@ const urlBase64ToUint8Array = base64String => {
   }
   return outputArray;
 }
-  
-if("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./worker.js")
-      .then(() => {
-        console.log("Pendaftaran ServiceWorker berhasil");
-      })
-      .catch(() => {
-        console.log("Pendaftaran ServiceWorker gagal");
-      });
-  });
 
+const requestNotifSubcription = () => {
   if("Notification" in window) {
     Notification.requestPermission()
       .then(result => {
@@ -53,6 +43,19 @@ if("serviceWorker" in navigator) {
   } else {
     console.log("PushManager tidak didukung browser ini.");
   }
+}
+
+if("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => {
+        console.log("Pendaftaran ServiceWorker berhasil");
+        setTimeout(requestNotifSubcription, 3000);
+      })
+      .catch(() => {
+        console.log("Pendaftaran ServiceWorker gagal");
+      });
+  });
 } else {
   console.log("ServiceWorker tidak didukung browser ini.");
 }
