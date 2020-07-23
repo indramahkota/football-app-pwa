@@ -4,7 +4,6 @@ import { CacheFirst, StaleWhileRevalidate } from "workbox-strategies";
 import { ExpirationPlugin } from "workbox-expiration";
 import { precacheAndRoute } from 'workbox-precaching';
 import { clientsClaim, skipWaiting } from 'workbox-core';
-import footballAppConstant from "./scripts/app-constants.js";
 
 /* ref: destination: https://fetch.spec.whatwg.org/#concept-request-destination */
 registerRoute(
@@ -42,7 +41,7 @@ registerRoute(
 
 registerRoute(
   new RegExp(/\.(?:eot|ttf|woff|woff2)$/),
-  new workbox.strategies.CacheFirst({
+  new CacheFirst({
     cacheName: 'font-icons',
     plugins: [
       new CacheableResponsePlugin({
@@ -56,17 +55,36 @@ registerRoute(
   })
 );
 
+/* API: CacheFirst */
 registerRoute(
-  new RegExp(footballAppConstant.proxyUrl+footballAppConstant.baseUrl),
+  ({request}) => request.url.indexOf("competitions?plan=TIER_ONE") > -1,
+  new CacheFirst({
+    cacheName: 'api-cachefirst',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200]
+      }),
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+      })
+    ]
+  })
+);
+
+/* API: StaleWhileRevalidate */
+registerRoute(
+  ({request}) => (request.url.indexOf("matches?status=SCHEDULED") > -1 ||
+  request.url.indexOf("standings") > -1 || request.url.indexOf("teams") > -1),
   new StaleWhileRevalidate({
-      cacheName: "cache-api",
+      cacheName: "api-stalewhilerevalidate",
       plugins: [
         new CacheableResponsePlugin({
           statuses: [0, 200],
         }),
         new ExpirationPlugin({
           maxAgeSeconds: 60 * 60, // 1 jam
-          maxEntries: 100
+          maxEntries: 60
         }),
       ],
   })
