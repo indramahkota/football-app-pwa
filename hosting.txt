@@ -1,2 +1,2 @@
 Firebase Hosting: https://pwapp-indramahkota.web.app/
-Github Pages:  
+Github Pages: https://indramahkota.github.io/
