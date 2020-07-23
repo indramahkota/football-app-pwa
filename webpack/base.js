@@ -91,7 +91,8 @@ module.exports = {
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       filename: "index.html",
-      template: "./src/template.html"
+      template: "./src/template.html",
+      minify: { collapseWhitespace: true, removeComments: true }
     }),
     new WebpackPwaManifest(PWAManifestData),
     new workboxPlugin.InjectManifest({

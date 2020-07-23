@@ -1,49 +1,78 @@
+import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 import { registerRoute } from "workbox-routing";
 import { CacheFirst, StaleWhileRevalidate } from "workbox-strategies";
 import { ExpirationPlugin } from "workbox-expiration";
 import { precacheAndRoute } from 'workbox-precaching';
 import { clientsClaim, skipWaiting } from 'workbox-core';
+import footballAppConstant from "./scripts/app-constants.js";
 
+/* ref: destination: https://fetch.spec.whatwg.org/#concept-request-destination */
 registerRoute(
-  new RegExp(/\.(?:png|gif|jpg|jpeg|svg|webp)$/),
+  ({request}) => request.destination === 'script' ||
+                 request.destination === 'style',
   new CacheFirst({
-      cacheName: "cache-images",
-      plugins: [
-          new ExpirationPlugin({
-              maxAgeSeconds: 60 * 60 * 24 * 30,
-              maxEntries: 100,
-          }),
-      ],
+    cacheName: 'sources',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200]
+      }),
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+      })
+    ]
   })
 );
 
 registerRoute(
-  new RegExp("https://api.football-data.org/v2/"),
+  ({request}) => request.destination === 'image',
+  new CacheFirst({
+    cacheName: 'images',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200]
+      }),
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+      })
+    ]
+  })
+);
+
+registerRoute(
+  new RegExp(/\.(?:eot|ttf|woff|woff2)$/),
+  new workbox.strategies.CacheFirst({
+    cacheName: 'font-icons',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200]
+      }),
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+      })
+    ]
+  })
+);
+
+registerRoute(
+  new RegExp(footballAppConstant.proxyUrl+footballAppConstant.baseUrl),
   new StaleWhileRevalidate({
       cacheName: "cache-api",
       plugins: [
-          new ExpirationPlugin({
-              maxAgeSeconds: 60 * 60,
-          }),
+        new CacheableResponsePlugin({
+          statuses: [0, 200],
+        }),
+        new ExpirationPlugin({
+          maxAgeSeconds: 60 * 60, // 1 jam
+          maxEntries: 100
+        }),
       ],
   })
 );
 
-registerRoute(
-  new RegExp("https://upload.wikimedia.org"),
-  new StaleWhileRevalidate({
-      cacheName: "cache-crest",
-      plugins: [
-          new ExpirationPlugin({
-              maxAgeSeconds: 60 * 60 * 24 * 30,
-              maxEntries: 60,
-          }),
-      ],
-  })
-);
-
-/* Posisi sangat berpengaruh */
-/* https://developers.google.com/web/tools/workbox/guides/codelabs/webpack */
+/* ref: https://developers.google.com/web/tools/workbox/guides/codelabs/webpack */
 skipWaiting();
 clientsClaim();
 
