@@ -17,23 +17,7 @@ registerRoute(
       }),
       new ExpirationPlugin({
         maxEntries: 60,
-        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
-      })
-    ]
-  })
-);
-
-registerRoute(
-  ({request}) => request.destination === 'image',
-  new CacheFirst({
-    cacheName: 'images',
-    plugins: [
-      new CacheableResponsePlugin({
-        statuses: [0, 200]
-      }),
-      new ExpirationPlugin({
-        maxEntries: 60,
-        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+        maxAgeSeconds: 365 * 24 * 60 * 60 // 1 Tahun
       })
     ]
   })
@@ -49,7 +33,23 @@ registerRoute(
       }),
       new ExpirationPlugin({
         maxEntries: 60,
-        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+        maxAgeSeconds: 365 * 24 * 60 * 60 // 1 Tahun
+      })
+    ]
+  })
+);
+
+registerRoute(
+  ({request}) => request.destination === 'image',
+  new CacheFirst({
+    cacheName: 'images',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200]
+      }),
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Hari
       })
     ]
   })
@@ -66,7 +66,7 @@ registerRoute(
       }),
       new ExpirationPlugin({
         maxEntries: 60,
-        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Hari
       })
     ]
   })
@@ -83,7 +83,7 @@ registerRoute(
           statuses: [0, 200],
         }),
         new ExpirationPlugin({
-          maxAgeSeconds: 60 * 60, // 1 jam
+          maxAgeSeconds: 60 * 60, // 1 Jam
           maxEntries: 60
         }),
       ],
