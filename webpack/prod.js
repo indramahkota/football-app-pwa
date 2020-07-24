@@ -26,6 +26,9 @@ module.exports = merge(base, {
         terserOptions: {
           output: {
             comments: false
+          },
+          compress: {
+            drop_console: true
           }
         },
         extractComments: false
