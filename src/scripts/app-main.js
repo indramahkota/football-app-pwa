@@ -1,5 +1,3 @@
-import M from "materialize-css";
-
 import { setButtonActive, setTitleForActivePage } from "./app-state.js";
 import { getCompetitionId, getTeamId,
   showOfflineToast, dismissOfflineToast } from "./app-utilities.js";

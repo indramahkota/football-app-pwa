@@ -8,6 +8,7 @@ const PWAManifestData = require("./manifest-data.js");
 
 module.exports = {
   entry: {
+    materializecss: "materialize-css",
     polyfill: "babel-polyfill",
     bundle: "./src/index.js"
   },
