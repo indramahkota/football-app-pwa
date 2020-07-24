@@ -1,5 +1,5 @@
 // const files = require.context('../assets/icons/favicons/', true);
-// const getFiles = name => files(name).default;
+// const getFiles = name => files(name, true).default;
 
 require.context("./assets/icons/favicons/", true);
 require.context("./assets/icons/maskicon/", true);
