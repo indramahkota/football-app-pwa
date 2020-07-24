@@ -1,5 +1,6 @@
 const path = require("path");
 
+/* ref: maskable icon https://maskable.app/editor */
 module.exports = {
     name: "Football App",
     short_name: "Football App",
@@ -109,6 +110,12 @@ module.exports = {
             destination: path.join("assets", "icons", "manifest"),
             sizes: "512x512",
             type: "image/png"
-        }
+        },
+        {
+            src: path.resolve("src/assets/icons/manifest/maskable_icon.png"),
+            destination: path.join("assets", "icons", "manifest"),
+            sizes: "1024x1024",
+            purpose: "any maskable"
+          }
     ]
 }
