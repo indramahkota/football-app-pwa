@@ -116,4 +116,4 @@ self.addEventListener("push", e => {
   e.waitUntil(self.registration.showNotification("Push Notification", options));
 });
 
-precacheAndRoute(self.__WB_MANIFEST);
+precacheAndRoute(self.__WB_MANIFEST, { ignoreUrlParametersMatching: [/.*/] });
