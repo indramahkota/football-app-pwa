@@ -74,7 +74,7 @@ registerRoute(
 
 /* API: StaleWhileRevalidate */
 registerRoute(
-  ({request}) => (request.url.indexOf("matches?status=SCHEDULED") > -1 ||
+  ({request}) => (request.url.indexOf("matches") > -1 ||
   request.url.indexOf("standings") > -1 || request.url.indexOf("teams") > -1),
   new StaleWhileRevalidate({
       cacheName: "api-stalewhilerevalidate",

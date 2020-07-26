@@ -1,3 +1,5 @@
+import nullImage from "../assets/images/null-image.jpg";
+
 const generateFavoriteTimContent = (parent, jsonData) => {
     let htmlHelper = `<div class="row">`;
     if(jsonData.length === 0) {
@@ -20,7 +22,7 @@ const generateFavoriteTimContent = (parent, jsonData) => {
                         <div class="card-panel">
                             <div class="row">
                                 <div class="col s4">
-                                    <img class="small-team-image" src="${element.image}" alt="Team Image" class="circle responsive-img">
+                                    <img class="small-team-image" src="${element.image}" onerror="this.onerror=null;this.src='${nullImage}';console.log('Gambar ini diganti karena 404 not found.'); alt="Team Image" class="circle responsive-img">
                                 </div>
                                 <div class="col s8" style="padding:0;margin:0;">
                                     <span class="card-title black-text truncate" style="padding:0;margin:0;">${element.nama}</span>
