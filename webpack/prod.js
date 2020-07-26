@@ -2,7 +2,8 @@ const { merge } = require("webpack-merge");
 const base = require("./base");
 const webpack = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const FileManagerPlugin = require("filemanager-webpack-plugin");
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 /* Babel-Polyfill vs Babel-Transform-Runtime */
 /* If you're building an app, you can use babel-polyfill. If you're building a library, make sure not to use babel-polyfill, and only the transform-runtime. */
@@ -16,8 +17,15 @@ module.exports = merge(base, {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      "process.env.NODE_ENV": JSON.stringify("production")
     }),
+    new FileManagerPlugin({
+      onEnd: {
+        copy: [
+          { source: "dist", destination: "../indramahkota.github.io/" }
+        ]
+      }
+    })
   ],
   optimization: {
     minimizer: [
@@ -52,7 +60,7 @@ module.exports = merge(base, {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env"]/* ,
-            plugins: ['@babel/plugin-transform-runtime'] */
+            plugins: ["@babel/plugin-transform-runtime"] */
           }
         }
       }
