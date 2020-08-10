@@ -66,9 +66,6 @@ module.exports = {
                 if (/assets\\icons\\manifest/.test(context)) {
                   return `assets/icons/manifest/${url}`;
                 }
-                if (/assets\\icons\\maskicon/.test(context)) {
-                  return `assets/icons/maskicon/${url}`;
-                }
                 if (/assets\\icons\\msicon/.test(context)) {
                   return `assets/icons/msicon/${url}`;
                 }
