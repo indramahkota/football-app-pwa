@@ -1,0 +1,67 @@
+.background > img {
+  max-width: 100%;
+}
+
+.team-image {
+  padding: 16px;
+  width: 120px;
+  height: 150px;
+  object-fit: contain;
+}
+
+.small-team-image {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+
+.row {
+  padding: 0;
+  margin: 0;
+}
+
+.padding-10 {
+  padding: 10px;
+}
+
+.min-height-175 {
+  min-height: 175px;
+}
+
+.min-height-45 {
+  min-height: 45px;
+}
+
+.cut-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+#pageContent {
+  margin-top: 12px;
+}
+
+#button-offline {
+  width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.dropdown-content {
+  min-width: 250px !important;
+  max-height: 350px !important;
+  overflow-y: auto !important;
+  backface-visibility: hidden !important;  
+}
+
+.side-percentage {
+  width: 41%;
+}
+
+.mid-percentage {
+  width: 18%;
+}

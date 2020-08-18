@@ -1,51 +1,98 @@
+import footballAppConstant from "./scripts/app-constants.js";
+
 const CACHE_NAME = "indramahkota-footballapp-v1";
 const filesToCache = [
+  /* root folder */
   "/",
+  "/polyfill.js",
   "/bundle.js",
+  "/bundle.css",
   "/worker.js",
   "/index.html",
   "/favicon.ico",
   "/manifest.json",
-  "/MaterialIcons-Regular.eot",
-  "/MaterialIcons-Regular.ttf",
-  "/MaterialIcons-Regular.woff",
-  "/MaterialIcons-Regular.woff2",
-  "/bgprofile.webp",
-  "/indra.webp",
-  "/icon_36x36.png",
-  "/icon_48x48.png",
-  "/icon_72x72.png",
-  "/icon_96x96.png",
-  "/icon_144x144.png",
-  "/icon_192x192.png",
-  "/icon_512x512.png"
+
+  /* inside folder /assets/icons/fonticon */
+  "/assets/icons/fonticon/MaterialIcons-Regular.eot",
+  "/assets/icons/fonticon/MaterialIcons-Regular.ttf",
+  "/assets/icons/fonticon/MaterialIcons-Regular.woff",
+  "/assets/icons/fonticon/MaterialIcons-Regular.woff2",
+
+  /* inside folder /assets/icons/images */
+  "/assets/images/bgprofile.webp",
+  "/assets/images/indra.webp",
+  "/assets/images/null-image.jpg",
+
+  /* inside folder /assets/icons/manifest */
+  "/assets/icons/manifest/icon_36x36.png",
+  "/assets/icons/manifest/icon_48x48.png",
+  "/assets/icons/manifest/icon_72x72.png",
+  "/assets/icons/manifest/icon_96x96.png",
+  "/assets/icons/manifest/icon_144x144.png",
+  "/assets/icons/manifest/icon_192x192.png",
+  "/assets/icons/manifest/icon_512x512.png"
 ];
 
 self.addEventListener("install", e => {
   e.waitUntil(
     caches.open(CACHE_NAME)
           .then(cache => cache.addAll(filesToCache))
+          .then(self.skipWaiting())
   );
 });
 
 self.addEventListener("activate", e => {
   e.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
+    caches.keys().then(cacheNames => 
+      Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
+          if(cacheName !== CACHE_NAME) {
             return caches.delete(cacheName);
           }
         })
-      );
-    })
+      )
+      .then(self.clients.claim())
+    )
   );
 });
 
 self.addEventListener("fetch", e => {
-  if (e.request.method !== "GET") return;
-  e.respondWith(
-    caches.match(e.request, { cacheName: CACHE_NAME })
-          .then(response => response || fetch(e.request))
+  if(e.request.url.indexOf(footballAppConstant.baseUrl) > -1) {
+    e.respondWith(
+      caches.open(CACHE_NAME).then(cache => 
+          fetch(e.request).then(response => {
+            cache.put(e.request.url, response.clone());
+            /* console.log(`Add cahche: ${e.request.url.replace(
+              footballAppConstant.proxyUrl+footballAppConstant.baseUrl, "")}`); */
+            return response;
+          })
+      )
+    );
+  } else {
+    e.respondWith(
+      caches.match(e.request, { cacheName: CACHE_NAME, ignoreSearch: true })
+            .then(response => response || fetch(e.request))
+    );
+  }
+});
+
+self.addEventListener("push", e => {
+  let body;
+  if(e.data) {
+    body = e.data.text();
+  } else {
+    body = "Push message no payload";
+  }
+  let options = {
+    body: body,
+    icon: "assets/icons/manifest/icon_144x144.png",
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1,
+    },
+  };
+  e.waitUntil(
+    self.registration.showNotification("Push Notification", options)
   );
 });
