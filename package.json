@@ -1,5 +1,5 @@
 {
-  "name": "pwapp-indramahkota",
+  "name": "webpack-pwa-football-app",
   "version": "1.0.0",
   "description": "PWA App Indra Mahkota",
   "main": "src/index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/indramahkota/pwapp-indramahkota.git"
+    "url": "git+https://github.com/indramahkota/webpack-pwa-football-app.git"
   },
   "keywords": [
     "PWA",
@@ -19,9 +19,9 @@
   "author": "Indra Mahkota",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/indramahkota/pwapp-indramahkota/issues"
+    "url": "https://github.com/indramahkota/webpack-pwa-football-app/issues"
   },
-  "homepage": "https://indramahkota.github.io",
+  "homepage": "https://github.com/indramahkota/webpack-pwa-football-app#readme",
   "devDependencies": {
     "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
