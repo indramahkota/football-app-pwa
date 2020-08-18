@@ -1,88 +1,108 @@
-import footballAppConstant from "./scripts/app-constants.js";
+import { CacheableResponsePlugin } from 'workbox-cacheable-response';
+import { registerRoute } from "workbox-routing";
+import { CacheFirst, StaleWhileRevalidate } from "workbox-strategies";
+import { ExpirationPlugin } from "workbox-expiration";
+import { precacheAndRoute } from 'workbox-precaching';
+import { clientsClaim, skipWaiting } from 'workbox-core';
 
-const CACHE_NAME = "indramahkota-footballapp-v1";
-const filesToCache = [
-  /* root folder */
-  "/",
-  "/polyfill.js",
-  "/bundle.js",
-  "/bundle.css",
-  "/worker.js",
-  "/index.html",
-  "/favicon.ico",
-  "/manifest.json",
+/* ref: destination: https://fetch.spec.whatwg.org/#concept-request-destination */
+registerRoute(
+  ({request}) => request.destination === 'script' ||
+                 request.destination === 'style',
+  new CacheFirst({
+    cacheName: 'sources',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200]
+      }),
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 365 * 24 * 60 * 60 // 1 Tahun
+      })
+    ]
+  })
+);
 
-  /* inside folder /assets/icons/fonticon */
-  "/assets/icons/fonticon/MaterialIcons-Regular.eot",
-  "/assets/icons/fonticon/MaterialIcons-Regular.ttf",
-  "/assets/icons/fonticon/MaterialIcons-Regular.woff",
-  "/assets/icons/fonticon/MaterialIcons-Regular.woff2",
+registerRoute(
+  new RegExp(/\.(?:eot|ttf|woff|woff2)$/),
+  new CacheFirst({
+    cacheName: 'font-icons',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200]
+      }),
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 365 * 24 * 60 * 60 // 1 Tahun
+      })
+    ]
+  })
+);
 
-  /* inside folder /assets/icons/images */
-  "/assets/images/bgprofile.webp",
-  "/assets/images/indra.webp",
-  "/assets/images/null-image.jpg",
+registerRoute(
+  ({request}) => request.destination === 'image',
+  new CacheFirst({
+    cacheName: 'images',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200]
+      }),
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Hari
+      })
+    ]
+  })
+);
 
-  /* inside folder /assets/icons/manifest */
-  "/assets/icons/manifest/icon_36x36.png",
-  "/assets/icons/manifest/icon_48x48.png",
-  "/assets/icons/manifest/icon_72x72.png",
-  "/assets/icons/manifest/icon_96x96.png",
-  "/assets/icons/manifest/icon_144x144.png",
-  "/assets/icons/manifest/icon_192x192.png",
-  "/assets/icons/manifest/icon_512x512.png"
-];
+/* API: CacheFirst */
+registerRoute(
+  ({request}) => request.url.indexOf("competitions?plan=TIER_ONE") > -1,
+  new CacheFirst({
+    cacheName: 'api-cachefirst',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200]
+      }),
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Hari
+      })
+    ]
+  })
+);
 
-self.addEventListener("install", e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME)
-          .then(cache => cache.addAll(filesToCache))
-          .then(self.skipWaiting())
-  );
-});
+/* API: StaleWhileRevalidate */
+registerRoute(
+  ({request}) => (request.url.indexOf("matches") > -1 ||
+  request.url.indexOf("standings") > -1 || request.url.indexOf("teams") > -1),
+  new StaleWhileRevalidate({
+      cacheName: "api-stalewhilerevalidate",
+      plugins: [
+        new CacheableResponsePlugin({
+          statuses: [0, 200],
+        }),
+        new ExpirationPlugin({
+          maxAgeSeconds: 60 * 60, // 1 Jam
+          maxEntries: 60
+        }),
+      ],
+  })
+);
 
-self.addEventListener("activate", e => {
-  e.waitUntil(
-    caches.keys().then(cacheNames => 
-      Promise.all(
-        cacheNames.map(cacheName => {
-          if(cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      )
-      .then(self.clients.claim())
-    )
-  );
-});
-
-self.addEventListener("fetch", e => {
-  if(e.request.url.indexOf(footballAppConstant.baseUrl) > -1) {
-    e.respondWith(
-      caches.open(CACHE_NAME).then(cache => 
-          fetch(e.request).then(response => {
-            cache.put(e.request.url, response.clone());
-            /* console.log(`Add cahche: ${e.request.url.replace(
-              footballAppConstant.proxyUrl+footballAppConstant.baseUrl, "")}`); */
-            return response;
-          })
-      )
-    );
-  } else {
-    e.respondWith(
-      caches.match(e.request, { cacheName: CACHE_NAME, ignoreSearch: true })
-            .then(response => response || fetch(e.request))
-    );
-  }
-});
+/* ref: https://developers.google.com/web/tools/workbox/guides/codelabs/webpack */
+skipWaiting();
+clientsClaim();
 
 self.addEventListener("push", e => {
   let body;
+
   if(e.data) {
     body = e.data.text();
   } else {
     body = "Push message no payload";
   }
+
   let options = {
     body: body,
     icon: "assets/icons/manifest/icon_144x144.png",
@@ -92,7 +112,8 @@ self.addEventListener("push", e => {
       primaryKey: 1,
     },
   };
-  e.waitUntil(
-    self.registration.showNotification("Push Notification", options)
-  );
+
+  e.waitUntil(self.registration.showNotification("Push Notification", options));
 });
+
+precacheAndRoute(self.__WB_MANIFEST, { ignoreUrlParametersMatching: [/.*/] });
