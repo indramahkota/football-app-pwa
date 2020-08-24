@@ -22,8 +22,7 @@ module.exports = merge(base, {
     new FileManagerPlugin({
       onEnd: {
         copy: [
-          { source: "dist", destination: "../indramahkota.github.io/" },
-          { source: "dist", destination: "../indramahkota.info/public/" }
+          { source: "dist", destination: "../indramahkota.github.io/" }
         ]
       }
     })
