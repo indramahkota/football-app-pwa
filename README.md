@@ -20,7 +20,7 @@ $ npm install
 $ npm run start
 ```
 
-![Football App](https://drive.google.com/uc?id=1BKUfTdbw77YP7ncm8IUzBBiRye313L9q)
+![Football App](https://raw.githubusercontent.com/indramahkota/indramahkota.github.io/master/assets/githubs/pwaapp1-min.PNG)
 
 ## References
 
