@@ -16,7 +16,7 @@ $ cd webpack-pwa-football-app
 # Install dependencies
 $ npm install
 
-#Start's development server
+# Start's development server
 $ npm run start
 ```
 
