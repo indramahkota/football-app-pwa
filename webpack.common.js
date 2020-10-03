@@ -1,28 +1,20 @@
-const path = require("path");
-const workboxPlugin = require("workbox-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const WebpackPwaManifest = require("webpack-pwa-manifest");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const PWAManifestData = require("./manifest-data.js");
+const { resolve } = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-  entry: {
-    materializecss: "materialize-css",
-    polyfill: "babel-polyfill",
-    bundle: "./src/index.js"
-  },
+  entry: resolve(__dirname, 'src/index.js'),
   output: {
-    path: path.resolve(__dirname, "../dist"),
-    filename: "[name].js"
+    path: resolve(__dirname, 'dist'),
+    filename: '[name].[contenthash:8].js'
   },
-  mode: "development",
-  devtool: "eval-source-map",
   module: {
     rules: [
       {
-        test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader"]
+        test: /\.(ts|js)x?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'
       },
       {
         test: /\.(xml)$/i,
@@ -85,18 +77,19 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: resolve(__dirname, 'public/'),
+          to: resolve(__dirname, 'dist/')
+        }
+      ]
+    }),
     new HtmlWebpackPlugin({
       filename: "index.html",
       template: "./src/template.html",
       minify: { collapseWhitespace: true, removeComments: true }
     }),
-    new WebpackPwaManifest(PWAManifestData),
-    new workboxPlugin.InjectManifest({
-      swSrc: "./src/service-worker.js",
-      swDest: "sw.js",
-      maximumFileSizeToCacheInBytes: 5000000
-    })
+    new CleanWebpackPlugin()
   ]
 };
